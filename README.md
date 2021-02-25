@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # taro-MiniApp-tt
 基于taro+react+mobx+taro-ui+sass开发的今日头条小程序demo
 
@@ -34,3 +35,7 @@ npm run dev:tt 或者 yarn dev:tt
 └── yarn.lock
 ```
 
+=======
+# taro-MIniApp-tt
+基于taro+react+mobx+taro-ui开发的今日头条小程序demo
+>>>>>>> 222831081ac118b264fcf2d84d2611973e9df267
