@@ -1,0 +1,100 @@
+.game {
+  min-height: 100vh;
+  background-color: #3a466a;
+  padding: 22px 0;
+  .movie-desc {
+    margin: 0 auto 15px;
+    text-align: center;
+    max-width: 730px;
+    .desc {
+      padding: 8px 12px;
+      background-color: #04080b;
+      color: #feffff;
+      font-size: 28px;
+      border-radius: 22px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .content-wrap {
+    padding-top: 20px;
+    .see-anwser,
+    .next-movie {
+      width: 166px;
+      height: 64px;
+      background-color: #43ad29;
+      color: #fff;
+      font-size: 24px;
+      line-height: 64px;
+      text-align: center;
+    }
+    .see-anwser {
+      border-top-right-radius: 32px;
+      border-bottom-right-radius: 32px;
+    }
+    .next-movie {
+      border-top-left-radius: 32px;
+      border-bottom-left-radius: 32px;
+    }
+    .coin-tip {
+      font-size: 20px;
+      color: #fff;
+      text-align: center;
+      .coin {
+        width: 229px;
+        height: 32px;
+        background-color: #fa5e2e;
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+        margin-left: 46px;
+      }
+      .tip {
+        width: 322px;
+        height: 55px;
+        background-color: #222222;
+        line-height: 55px;
+        border-radius: 12px;
+      }
+    }
+  }
+
+  .write-wrap {
+    margin-top: 20px;
+    border: 2px solid #3d395e;
+    box-shadow: 0 0 24px #1a284d;
+    .anwser {
+      margin: 20px auto;
+      .word {
+        height: 86px;
+        width: 86px;
+        background-color: #32334f;
+        margin-right: 15px;
+        border-radius: 10px;
+        color: #fff;
+        line-height: 86px;
+        text-align: center;
+      }
+    }
+    .options {
+      // padding: 0 60px 18px;
+      padding-left: 60px;
+      padding-right: 20px;
+      .word {
+        height: 92px;
+        width: 92px;
+        background-color: #8488a1;
+        margin-right: 40px;
+        margin-bottom: 26px;
+        border-radius: 10px;
+        color: #fff;
+        line-height: 92px;
+        text-align: center;
+        // &:nth-child(5n) {
+        //   margin-right: 0;
+        // }
+      }
+    }
+  }
+}

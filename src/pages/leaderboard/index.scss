@@ -1,0 +1,44 @@
+.leaderboard {
+  min-height: 100vh;
+  background-color: #3a466a;
+}
+.at-tabs__header {
+  background-color: #3a466a;
+  .at-tabs__item {
+    color: #f5cce4;
+    font-size: 28px;
+  }
+}
+
+.at-tabs__underline {
+  background-color: #3a466a;
+}
+.content-wrap {
+  color: #f4fafd;
+  font-size: 28px;
+  padding: 20px;
+  background-color: #536186;
+  .item {
+    margin-bottom: 20px;
+    background-color: #354459;
+    padding: 28px;
+    border-radius: 12px;
+    .number {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background-color: #737c8d;
+      line-height: 65px;
+      text-align: center;
+      margin-right: 36px;
+    }
+    .avatar {
+      width: 68px;
+      height: 68px;
+      margin-right: 24px;
+    }
+    .right {
+      width: 150px;
+    }
+  }
+}

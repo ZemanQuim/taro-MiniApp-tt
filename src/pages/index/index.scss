@@ -1,1 +1,68 @@
+.index {
+  min-height: 100vh;
+  background-image: url('../../assets/index_bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
+  color: #fff;
+  padding: 0 38px 30px;
 
+  .avatar {
+    margin-right: 34px;
+  }
+}
+
+.nickName {
+  font-size: 36px;
+}
+.coin {
+  font-size: 28px;
+  .guess-right,
+  .watch {
+    margin-left: 10px;
+  }
+}
+.game-rule {
+  position: absolute;
+  top: 100px;
+  right: 38px;
+  z-index: 333;
+  font-size: 28px;
+  color: #69dcff;
+}
+.quiz {
+  width: 100%;
+  height: 276px;
+}
+.pass-through {
+  width: 100%;
+  height: 276px;
+}
+.sign-in {
+  width: 100%;
+  height: 98px;
+}
+.leaderboard-box,
+.personal-center-box {
+  width: 318px;
+  height: 218px;
+  margin-top: 36px;
+}
+.leaderboard,
+.personal-center {
+  width: 100%;
+  height: 218px;
+}
+.login-btn,
+.invite-btn {
+  width: 672px;
+  height: 128px;
+  border-radius: 128px;
+  background-color: #433652;
+  margin: 30px auto 0;
+  text-align: center;
+  .text {
+    font-size: 40px;
+    line-height: 128px;
+  }
+}

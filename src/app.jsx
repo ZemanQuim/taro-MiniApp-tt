@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
+import Taro from '@tarojs/taro';
 import { Provider } from 'mobx-react';
 import 'taro-ui/dist/style/index.scss';
-import { counterStore, homeStore } from './store/index';
+import { counterStore, homeStore, authStore } from './store/index';
 
 import './app.scss';
 
 const store = {
   counterStore,
   homeStore,
+  authStore,
 };
 
 class App extends Component {

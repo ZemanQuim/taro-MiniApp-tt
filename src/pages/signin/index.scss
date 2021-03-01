@@ -1,0 +1,93 @@
+.signin {
+  background-color: #536186;
+  padding: 22px 25px;
+  .signin-btn {
+    width: 100%;
+    height: 88px;
+    background-color: #f75b5c;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 32px;
+    line-height: 88px;
+    text-align: center;
+  }
+  .rule {
+    position: absolute;
+    top: 124px;
+    right: 64px;
+    font-size: 28px;
+    color: #36b730;
+  }
+  .signin-wrap {
+    width: 700px;
+    height: 90vh;
+    border-radius: 12px;
+    background-color: #536186;
+    border: 2px solid #3d395e;
+    box-shadow: 0 0 24px #1a284d;
+    margin: 60px auto 0;
+    padding: 25px 35px 0;
+    .content-wrap {
+      width: 100%;
+      height: 200px;
+      .item {
+        height: 118px;
+        border-bottom: 2px solid #9fa8bf;
+        .avatar {
+          width: 76px;
+          height: 76px;
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+        .user {
+          .user-name {
+            font-size: 24px;
+            color: #ea612c;
+            line-height: 30px;
+          }
+          .signin-time {
+            font-size: 20px;
+            color: #bccbec;
+            margin-top: 12px;
+          }
+        }
+        .reward {
+          width: 176px;
+          font-size: 20px;
+          .days {
+            color: #bccbec;
+            line-height: 28px;
+          }
+          .coin {
+            width: 140px;
+            height: 52px;
+            line-height: 52px;
+            text-align: center;
+            background-color: #37b631;
+            border-radius: 6px;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
+
+.at-tabs__header {
+  padding: 0 80px;
+  background-color: #425575;
+  .at-tabs__item {
+    color: #cddbed;
+    font-size: 28px;
+  }
+}
+
+.at-tabs__underline {
+  background-color: #3a466a;
+}
+.at-modal__content {
+  min-height: auto;
+}
+.rule-content {
+  text-align: center;
+}
