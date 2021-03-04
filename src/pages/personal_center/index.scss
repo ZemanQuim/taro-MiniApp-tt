@@ -61,11 +61,14 @@
     }
   }
   .coin-list {
-    width: 726px;
+    width: 710px;
     height: 472px;
-    margin: 0 auto;
-    background: url(https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/coin_list_bg.png)
-      no-repeat center/100%;
+    margin: 10px auto 0;
+    background-color: #524b72;
+    border: 2px solid #3d395e;
+    border-radius: 12px;
+    box-shadow: 0 0 24px #1a284d;
+    overflow: auto;
     padding: 30px 50px;
     .list-title {
       width: 624px;

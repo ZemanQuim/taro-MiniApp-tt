@@ -13,7 +13,20 @@ class Index extends Component {
     authStore.getUserInfo();
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    // const { authStore } = this.props.store;
+    // Taro.checkSession({
+    //   success: function () {
+    //     //session_key 未过期，并且在本生命周期一直有效
+    //     console.log('session_key 未过期');
+    //   },
+    //   fail: function () {
+    //     console.log('session_key 已经失效');
+    //     Taro.showToast({ title: '登录失效,请重新登录', icon: 'none' });
+    //     // session_key 已经失效，需要重新执行登录流程
+    //   },
+    // });
+  }
 
   componentWillUnmount() {}
 
@@ -25,16 +38,23 @@ class Index extends Component {
     const { authStore } = this.props.store;
     Taro.login({
       success: function (res) {
-        console.log('login=====>', res);
         if (res.code) {
-          authStore.getSetting();
-          //   //发起网络请求
-          //   Taro.request({
-          //     url: 'https://test.com/onLogin',
-          //     data: {
-          //       code: res.code,
-          //     },
-          //   });
+          Taro.getSetting({
+            success: async (result) => {
+              if (result.authSetting['scope.userInfo'] === true) {
+                // 用户已授权
+                console.log('用户已授权');
+                await authStore.login({ code: res.code });
+                authStore.getUserInfo();
+              } else {
+                // 用户未授权
+                console.log('用户未授权');
+                Taro.redirectTo({
+                  url: '../login/index',
+                });
+              }
+            },
+          });
         } else {
           console.log('登录失败！' + res.errMsg);
         }
@@ -42,9 +62,9 @@ class Index extends Component {
     });
   };
 
-  _invite = () => {
-    console.log('邀请好友');
-  };
+  // _invite = () => {
+  //   console.log('邀请好友');
+  // };
 
   _ruleHandle = () => {
     Taro.navigateTo({
@@ -53,30 +73,74 @@ class Index extends Component {
   };
 
   _signinHandle = () => {
-    Taro.navigateTo({
-      url: '../signin/index',
-    });
+    const {
+      authStore: { isLogin },
+    } = this.props.store;
+    if (isLogin) {
+      Taro.navigateTo({
+        url: '../signin/index',
+      });
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '您未授权登录\n请您确定重新获取授权哦~',
+        confirmColor: '#DC0909',
+      });
+    }
   };
   _personalHandle = () => {
-    Taro.navigateTo({
-      url: '../personal_center/index',
-    });
+    const {
+      authStore: { isLogin },
+    } = this.props.store;
+    if (isLogin) {
+      Taro.navigateTo({
+        url: '../personal_center/index',
+      });
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '您未授权登录\n请您确定重新获取授权哦~',
+        confirmColor: '#DC0909',
+      });
+    }
   };
 
   _leaderboardHandle = () => {
-    Taro.navigateTo({
-      url: '../leaderboard/index',
-    });
+    const {
+      authStore: { isLogin },
+    } = this.props.store;
+    if (isLogin) {
+      Taro.navigateTo({
+        url: '../leaderboard/index',
+      });
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '您未授权登录\n请您确定重新获取授权哦~',
+        confirmColor: '#DC0909',
+      });
+    }
   };
   _gameHandle = () => {
-    Taro.navigateTo({
-      url: '../game/index',
-    });
+    const {
+      authStore: { isLogin },
+    } = this.props.store;
+    if (isLogin) {
+      Taro.navigateTo({
+        url: '../game/index',
+      });
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '您未授权登录\n请您确定重新获取授权哦~',
+        confirmColor: '#DC0909',
+      });
+    }
   };
 
   render() {
     const {
-      authStore: { userinfo },
+      authStore: { isLogin, userinfo, point, right_num, see_num },
     } = this.props.store;
     return (
       <View className='index'>
@@ -85,7 +149,7 @@ class Index extends Component {
             <AtAvatar
               circle
               image={
-                userinfo.avatarUrl
+                userinfo.avatarUrl && isLogin
                   ? userinfo.avatarUrl
                   : 'https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
               }
@@ -93,18 +157,18 @@ class Index extends Component {
           </View>
           <View className='at-col'>
             <View className='nickName'>
-              {userinfo.nickName ? userinfo.nickName : '游客'}
+              {userinfo.nickName && isLogin ? userinfo.nickName : '游客'}
             </View>
-            {userinfo.nickName ? (
+            {userinfo.nickName && isLogin ? (
               <View className='coin at-row'>
                 <View>
-                  积分:<Text>120</Text>
+                  积分:<Text>{point}</Text>
                 </View>
                 <View className='guess-right'>
-                  猜对:<Text>120</Text>
+                  猜对:<Text>{right_num}</Text>
                 </View>
                 <View className='watch'>
-                  查看:<Text>120</Text>
+                  查看:<Text>{see_num}</Text>
                 </View>
               </View>
             ) : (
@@ -121,6 +185,8 @@ class Index extends Component {
             src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/quiz.png'
           />
         </View>
+        {/* 
+          // 闯关模式
         <View
           className='pass-through-box'
           onClick={this._gameHandle.bind(this)}
@@ -129,7 +195,7 @@ class Index extends Component {
             className='pass-through'
             src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/pass-through.png'
           />
-        </View>
+        </View> */}
         <View className='sign-in-box' onClick={this._signinHandle.bind(this)}>
           <Image
             className='sign-in'
@@ -156,15 +222,14 @@ class Index extends Component {
             />
           </View>
         </View>
-        {userinfo.nickName ? (
-          <View className='invite-btn' onClick={this._invite.bind(this)}>
-            <Text className='text'>邀请好友一起猜</Text>
-          </View>
-        ) : (
+        {!isLogin ? (
           <View className='login-btn' onClick={this._login.bind(this)}>
             <Text className='text'>您还没登录（点击登录）</Text>
           </View>
-        )}
+        ) : // <View className='invite-btn' onClick={this._invite.bind(this)}>
+        //   <Text className='text'>邀请好友一起猜</Text>
+        // </View>
+        null}
       </View>
     );
   }

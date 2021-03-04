@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
+import Taro from '@tarojs/taro';
 import { View, Text, Video } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
-
-import { AtGrid } from 'taro-ui';
 import './index.scss';
 
 @inject('store')
@@ -11,13 +10,18 @@ class Index extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      myAnwser: ['', '', '', ''],
+      index: 0,
+      myAnwser: [],
+      exactAnwser: '',
+      isGameOver: false,
     };
   }
 
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    this._nextMovie();
+  }
 
   componentWillUnmount() {}
 
@@ -25,38 +29,92 @@ class Index extends Component {
 
   componentDidHide() {}
 
+  //点击答案区域
+  anwserClick = (index) => {
+    const { myAnwser, isGameOver } = this.state;
+    if (isGameOver) return false;
+    for (let i = index; i < myAnwser.length; i++) {
+      myAnwser[i] = '';
+    }
+    this.setState({
+      myAnwser,
+      index,
+    });
+  };
+
+  //点击文字区域
   wordClick = (item) => {
-    console.log(item);
-    // const { myAnwser } = this.state;
-    // let anwser = [];
-    // myAnwser.forEach((v, i) => {
-    //   if (!v) {
-    //     v = item;
-    //     return;
-    //   }
-    //   anwser[i] = v;
-    // });
-    // this.setState({
-    // })
+    const { counterStore } = this.props.store;
+    const { oneMovie } = counterStore;
+    const { myAnwser, index, exactAnwser, isGameOver } = this.state;
+    if (isGameOver) return false;
+    myAnwser.splice(index, 1, item);
+    this.setState({
+      myAnwser,
+      index: index + 1,
+    });
+    // todo 判断是否与正确答案一质
+    if (myAnwser.join('').length === exactAnwser.length) {
+      if (myAnwser.join('') === exactAnwser) {
+        console.log('回答正确');
+      } else {
+        console.log('回答错误');
+      }
+      counterStore.anwser({ words: myAnwser.join(''), movie_id: oneMovie.id });
+
+      //结束
+      this.setState({
+        isGameOver: true,
+      });
+    }
+  };
+
+  _nextMovie = async () => {
+    //开始游戏
+    this.setState({
+      isGameOver: false,
+    });
+    const { counterStore } = this.props.store;
+    await counterStore.getOneMovie();
+    const { oneMovie } = counterStore;
+    let myAnwser = new Array(oneMovie.title.length).fill('');
+    this.setState({
+      myAnwser,
+      exactAnwser: oneMovie.title,
+      index: 0,
+    });
+  };
+
+  _watchMovieTitle = async () => {
+    const { counterStore } = this.props.store;
+    const { oneMovie } = counterStore;
+    await counterStore.watchAnwser({ movie_id: oneMovie.id });
+    const { exactAnwser } = counterStore;
+    this.setState({
+      myAnwser: [...exactAnwser],
+      isGameOver: true,
+    });
+    Taro.showToast({ title: '查看成功', duration: 1500 });
   };
 
   render() {
-    const options = '气原比向金岛么又命或刚髅质看第此但骷利道';
-
+    const {
+      counterStore: { oneMovie, point, words },
+    } = this.props.store;
+    let poster =
+      oneMovie.url + '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_205,m_fast';
     const { myAnwser } = this.state;
-    // const {
-    //   homeStore: { rainbow },
-    // } = this.props.store;
+
     return (
       <View className='game'>
         <View className='movie-desc'>
-          <Text className='desc'>美国部队进入无人岛，一不小心就会被吃掉</Text>
+          <Text className='desc'>{oneMovie.note}</Text>
         </View>
         <View className='movie-wrap'>
           <Video
             style='width: 100%;height:205px'
-            src='https://sf1-ttcdn-tos.pstatp.com/obj/developer/sdk/1534422848153.mp4'
-            poster='https://misc.aotu.io/booxood/mobile-video/cover_900x500.jpg'
+            src={oneMovie.url}
+            poster={poster}
             initialTime='0'
             id='video'
             autoplay
@@ -71,31 +129,42 @@ class Index extends Component {
         </View>
 
         <View className='content-wrap at-row at-row__justify--between at-row__align--center'>
-          <View className='see-anwser'>查看电影名</View>
+          <View
+            className='see-anwser'
+            onClick={this._watchMovieTitle.bind(this)}
+          >
+            查看电影名
+          </View>
           <View className='coin-tip'>
-            <View className='coin'>我的积分:120</View>
+            <View className='coin'>我的积分:{point}</View>
             <View className='tip'>从下面20个字中选出正确的片名</View>
           </View>
-          <View className='next-movie'>猜下一部</View>
+          <View className='next-movie' onClick={this._nextMovie.bind(this)}>
+            猜下一部
+          </View>
         </View>
 
         <View className='write-wrap '>
           <View className='anwser at-row at-row__justify--center'>
             {myAnwser.map((item, index) => {
               return (
-                <View key={index} className='word'>
+                <View
+                  key={index}
+                  className='word'
+                  onClick={this.anwserClick.bind(this, index)}
+                >
                   {item}
                 </View>
               );
             })}
           </View>
           <View className='options at-row at-row--wrap at-row__justify--between'>
-            {options.split('').map((item, index) => {
+            {words?.map((item, index) => {
               return (
                 <View
                   className='word'
                   key={index}
-                  // onClick={this.wordClick(item)}
+                  onClick={this.wordClick.bind(this, item)}
                 >
                   {item}
                 </View>

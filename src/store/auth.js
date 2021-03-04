@@ -1,33 +1,14 @@
 import Taro from '@tarojs/taro';
 import { observable, action, runInAction } from 'mobx';
+import { login, getUserInfo, bindInfo } from '../servers/servers';
 
-class homeStore {
+class authStore {
   @observable userinfo = {};
-  @observable loading = false;
-
-  @action getSetting = () => {
-    // 可以通过 Taro.getSetting 先查询一下用户是否授权了 "scope.userInfo" 这个 scope
-    Taro.getSetting({
-      success: (res) => {
-        console.log(res.authSetting);
-        if (!res.authSetting['scope.userInfo']) {
-          Taro.authorize({
-            scope: 'scope.userInfo',
-            success: () => {
-              this.getUserInfo();
-            },
-            fail: (resp) => {
-              console.log('授权失败！', resp);
-              this.openSetting();
-            },
-          });
-        } else {
-          this.getUserInfo();
-          // console.log('scope登录失败！', res.errMsg);
-        }
-      },
-    });
-  };
+  @observable isLogin = false;
+  // @observable openid = '';
+  @observable point = 0;
+  @observable right_num = 0;
+  @observable see_num = 0;
 
   //打开设置页面
   openSetting = () => {
@@ -42,24 +23,62 @@ class homeStore {
     });
   };
 
+  //获取用户信息
   @action getUserInfo = () => {
     // 用户同意授权用户信息
     Taro.getUserInfo({
       success: (resp) => {
-        console.log('userinfo---------->', resp);
         runInAction(() => {
           this.userinfo = resp.userInfo;
         });
-        // var userInfo = res.userInfo
-        // var nickName = userInfo.nickName
-        // var avatarUrl = userInfo.avatarUrl
-        // var gender = userInfo.gender //性别 0：未知、1：男、2：女
-        // var province = userInfo.province
-        // var city = userInfo.city
-        // var country = userInfo.country
+        //绑定用户信息到后台
+        bindInfo({
+          avatar: resp.userInfo.avatarUrl,
+          nickname: resp.userInfo.nickName,
+        });
+        //获取后台用户数据
+        this.getInfo();
       },
     });
   };
+
+  //登录后台
+  @action login = async (postData) => {
+    try {
+      const res = await login(postData);
+      runInAction(() => {
+        Taro.setStorage({ key: 'TOKEN', data: res.data.openid });
+        // this.openid = res.data.openid;
+        this.isLogin = true;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  //查询用户数据
+  @action getInfo = async () => {
+    Taro.showLoading({ title: '加载中' });
+    try {
+      const { code, data } = await getUserInfo();
+      runInAction(() => {
+        if (code == 200 && data) {
+          this.isLogin = true;
+          this.point = data.point;
+          this.right_num = data.right_num;
+          this.see_num = data.see_num || 0;
+        }
+      });
+      Taro.hideLoading();
+    } catch (err) {
+      console.error(err);
+      Taro.hideLoading();
+    }
+  };
+
+  @action changeState = (state) => {
+    Object.assign(this, state);
+  };
 }
 
-export default new homeStore();
+export default new authStore();

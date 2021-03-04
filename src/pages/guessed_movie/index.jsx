@@ -8,9 +8,15 @@ import './index.scss';
 @inject('store')
 @observer
 class Index extends Component {
+  state = {
+    page: 1,
+  };
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { counterStore } = this.props.store;
+    counterStore.getGuessList({ page: this.state.page });
+  }
 
   componentWillUnmount() {}
 
@@ -25,27 +31,66 @@ class Index extends Component {
     }, 1000);
   }
 
-  onReachBottom() {
+  onReachBottom = () => {
+    // const { counterStore } = this.props.store;
+    // let page = this.state.page;
+    // page++;
+    // this.setState({ page });
     console.log('监听用户上拉触底事件');
+    // counterStore.getGuessList({ page: page });
+  };
+
+  _onPlay(e) {
+    var curIdx = e.currentTarget.id;
+    // 没有播放时播放视频
+    // console.log(curIdx);
+    if (!this.state.indexCurrent) {
+      this.setState({
+        indexCurrent: curIdx,
+      });
+      var videoContext = Taro.createVideoContext(curIdx, this); //这里对应的视频id
+      videoContext.play();
+    } else {
+      // 有播放时先将prev暂停，再播放当前点击的current
+      var videoContextPrev = Taro.createVideoContext(
+        this.state.indexCurrent,
+        this
+      ); //this是在自定义组件下，当前组件实例的this，以操作组件内 video 组件（在自定义组件中药加上this，如果是普通页面即不需要加）
+      if (this.state.indexCurrent != curIdx) {
+        // console.log(123);
+        videoContextPrev.pause();
+        this.setState({
+          indexCurrent: curIdx,
+        });
+        var videoContextCurrent = Taro.createVideoContext(curIdx, this);
+        videoContextCurrent.play();
+      }
+    }
   }
 
   render() {
-    const MovieList = [{}, {}, {}];
+    const { counterStore } = this.props.store;
+    const { myGuessList } = counterStore;
 
     return (
       <View className='guessed-movie'>
-        {MovieList.map((item, index) => {
+        {myGuessList.map((item, index) => {
           return (
             <View key={index} className='movie-item'>
-              <View className='desc'>这是电影描述,这是电影描述</View>
+              <View className='desc'>{item?.movie.note}</View>
               <Video
+                className='video'
                 style='width: 100%; height:216px'
-                src='https://sf1-ttcdn-tos.pstatp.com/obj/developer/sdk/1534422848153.mp4'
+                src={item?.movie.url}
                 autoplay={false}
-                poster='https://misc.aotu.io/booxood/mobile-video/cover_900x500.jpg'
+                poster={
+                  item?.movie.url +
+                  '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_205,m_fast'
+                }
                 initialTime='0'
-                id='video'
+                id={'video' + item?.movie.id}
                 controls
+                onPlay={this._onPlay.bind(this)}
                 loop={false}
                 muted={false}
                 showFullscreenBtn={false}

@@ -9,8 +9,9 @@ import './index.scss';
 @observer
 class Index extends Component {
   componentWillMount() {
-    const { authStore } = this.props.store;
+    const { authStore, counterStore } = this.props.store;
     authStore.getUserInfo();
+    counterStore.getPointRecord();
   }
 
   componentDidMount() {}
@@ -32,9 +33,24 @@ class Index extends Component {
     });
   };
 
+  _loginOut = () => {
+    const { authStore } = this.props.store;
+    authStore.changeState({ isLogin: false });
+    Taro.removeStorage({
+      key: 'Authorization',
+    });
+    Taro.navigateBack({
+      success: (res) => {
+        console.log(res);
+      },
+    });
+    Taro.showToast({ title: '退出成功' });
+  };
+
   render() {
     const {
-      authStore: { userinfo },
+      authStore: { userinfo, point },
+      counterStore: { pointRecord },
     } = this.props.store;
     return (
       <View className='personal'>
@@ -51,11 +67,11 @@ class Index extends Component {
             <View className='username'>
               {userinfo.nickName ? userinfo.nickName : '游客'}
             </View>
-            <View className='coin'>积分:120</View>
+            <View className='coin'>积分:{point}</View>
           </View>
           <Button
             className='loginout at-col at-col__offset-2'
-            openType='getUserInfo'
+            onClick={this._loginOut.bind(this)}
           >
             退出登录
           </Button>
@@ -87,16 +103,18 @@ class Index extends Component {
             <View className='title-time'>时间</View>
           </View>
           <View className='list-content'>
-            <View className='list-detail at-row at-row__justify--around at-row__align--center'>
-              <View className='coin_in at-col'>每日签到</View>
-              <View className='coin_num at-col'>+100积分</View>
-              <View className='coin_time at-col'>2021-02-25 00:00:00</View>
-            </View>
-            <View className='list-detail at-row at-row__justify--around at-row__align--center'>
-              <View className='coin_in at-col'>电影猜错扣除</View>
-              <View className='coin_num at-col'>-10积分</View>
-              <View className='coin_time at-col'>2021-02-25 00:00:00</View>
-            </View>
+            {pointRecord.map(({ title, point, created_at }, index) => {
+              return (
+                <View
+                  key={index}
+                  className='list-detail at-row at-row__justify--around at-row__align--center'
+                >
+                  <View className='coin_in at-col'>{title}</View>
+                  <View className='coin_num at-col'>{point}</View>
+                  <View className='coin_time at-col'>{created_at}</View>
+                </View>
+              );
+            })}
           </View>
         </View>
       </View>

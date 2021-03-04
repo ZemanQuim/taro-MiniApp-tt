@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Button } from '@tarojs/components';
+import Taro from '@tarojs/taro';
+import { View, Text, Image } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 
-import {
-  AtTabs,
-  AtTabsPane,
-  AtModal,
-  AtModalHeader,
-  AtModalContent,
-  AtModalAction,
-} from 'taro-ui';
+import { AtTabs, AtTabsPane } from 'taro-ui';
 import './index.scss';
 
 @inject('store')
@@ -19,17 +13,15 @@ class Index extends Component {
     super(...arguments);
     this.state = {
       current: 0,
-      isOpened: false,
-      signIsOpened: false,
     };
   }
 
-  componentWillMount() {}
-
-  componentDidMount() {
-    // const { homeStore } = this.props.store;
-    // homeStore.getJokeData();
+  componentWillMount() {
+    const { counterStore } = this.props.store;
+    counterStore.signInRankingList({ type: this.state.current + 1 });
   }
+
+  componentDidMount() {}
 
   componentWillUnmount() {}
 
@@ -37,91 +29,55 @@ class Index extends Component {
 
   componentDidHide() {}
 
+  //切换tab
   _handleClick = (value) => {
     this.setState({
       current: value,
     });
   };
+
+  //规则
   _ruleClick = () => {
-    this.setState({
-      isOpened: true,
+    Taro.showModal({
+      title: '签到奖励规则',
+      content:
+        '每天签到奖励100积分\n连续签到30天再送10元话费\n连续签到180天再送50元话费\n话费领取:在个人中心联系客服\n连续签到中间断签，从头开始计\n签到有广告，看完广告才有奖励',
+      confirmColor: '#FD2C57',
     });
   };
+
+  //签到
   _signClick = () => {
-    this.setState({
-      signIsOpened: true,
-    });
-  };
-  _handleClose = () => {
-    this.setState({
-      isOpened: false,
-    });
-  };
-  _signinClose = () => {
-    this.setState({
-      signIsOpened: false,
+    const { counterStore } = this.props.store;
+    Taro.showModal({
+      title: '签到领积分',
+      content: '签到有广告,看完广告才有积分奖励\n点击确定完成签到',
+      confirmColor: '#FD2C57',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定');
+          counterStore.signIn();
+        } else if (res.cancel) {
+          console.log('用户点击取消');
+        }
+      },
     });
   };
 
   render() {
     const tabList = [{ title: '今日签到' }, { title: '连续签到' }];
-    const signinList = [{}, {}, {}, {}, {}, {}, {}];
-    const { isOpened, signIsOpened } = this.state;
-    // const {
-    //   homeStore: { rainbow },
-    // } = this.props.store;
+    const {
+      counterStore: { isSignToday, todaySignin, continuousSignin },
+    } = this.props.store;
     return (
       <View className='signin'>
         <View className='signin-btn' onClick={this._signClick.bind(this)}>
-          点击签到领积分
+          {isSignToday == 0 ? '点击签到领积分' : '你今天已经签到了!'}
         </View>
         <Text className='rule' onClick={this._ruleClick.bind(this)}>
           签到奖励规则
         </Text>
-        {/* <AtModal
-          isOpened={isOpened}
-          cancelText='取消'
-          confirmText='确认'
-          onClose={this._handleClose.bind(this)}
-          onCancel={this._handleClose.bind(this)}
-          onConfirm={this._handleClose.bind(this)}
-          content='每天签到奖励100积分\n
-          连续签到30天再送10元话费\n
-          连续签到180天再送50元话费\n
-          话费领取:在个人中心联系客服\n
-          连续签到中间断签，从头开始计\n
-          签到有广告，看完广告才有奖励'
-        /> */}
-        <AtModal isOpened={isOpened}>
-          <AtModalHeader>签到奖励规则</AtModalHeader>
-          <AtModalContent>
-            <View className='rule-content'>
-              <View>每天签到奖励100积分</View>
-              <View>连续签到30天再送10元话费</View>
-              <View>连续签到180天再送50元话费</View>
-              <View>话费领取:在个人中心联系客服</View>
-              <View>连续签到中间断签，从头开始计</View>
-              <View>签到有广告，看完广告才有奖励</View>
-            </View>
-          </AtModalContent>
-          <AtModalAction>
-            <Button onClick={this._handleClose.bind(this)}>取消</Button>
-            <Button onClick={this._handleClose.bind(this)}>确定</Button>
-          </AtModalAction>
-        </AtModal>
-        <AtModal isOpened={signIsOpened}>
-          <AtModalHeader>签到领积分</AtModalHeader>
-          <AtModalContent>
-            <View className='rule-content'>
-              <View>签到有广告,看完广告才有积分奖励</View>
-              <View>点击确定完成签到</View>
-            </View>
-          </AtModalContent>
-          <AtModalAction>
-            <Button onClick={this._signinClose.bind(this)}>取消</Button>
-            <Button onClick={this._signinClose.bind(this)}>确定</Button>
-          </AtModalAction>
-        </AtModal>
+
         <View className='signin-wrap'>
           <AtTabs
             current={this.state.current}
@@ -130,52 +86,50 @@ class Index extends Component {
           >
             <AtTabsPane current={this.state.current} index={0}>
               <View className='content-wrap'>
-                {signinList.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      className='item at-row at-row__justify--between at-row__align--center'
-                    >
-                      <Image
-                        className='avatar'
-                        src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
-                      />
-                      <View className='user at-col'>
-                        <View className='user-name'>Cola爱追剧</View>
-                        <View className='signin-time'>今天 15:42</View>
+                {todaySignin.map(
+                  ({ nickname, avatar, created_at, day, point }, index) => {
+                    return (
+                      <View
+                        key={index}
+                        className='item at-row at-row__justify--between at-row__align--center'
+                      >
+                        <Image className='avatar' src={avatar} />
+                        <View className='user at-col'>
+                          <View className='user-name'>{nickname}</View>
+                          <View className='signin-time'>{created_at}</View>
+                        </View>
+                        <View className='reward'>
+                          <View className='days'>连续签到{day}天</View>
+                          <View className='coin'>奖励{point}积分</View>
+                        </View>
                       </View>
-                      <View className='reward'>
-                        <View className='days'>连续签到1天</View>
-                        <View className='coin'>奖励100积分</View>
-                      </View>
-                    </View>
-                  );
-                })}
+                    );
+                  }
+                )}
               </View>
             </AtTabsPane>
             <AtTabsPane current={this.state.current} index={1}>
               <View className='content-wrap'>
-                {signinList.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      className='item at-row at-row__justify--between at-row__align--center'
-                    >
-                      <Image
-                        className='avatar'
-                        src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
-                      />
-                      <View className='user at-col'>
-                        <View className='user-name'>Cola爱追剧</View>
-                        <View className='signin-time'>今天 15:42</View>
+                {continuousSignin.map(
+                  ({ nickname, avatar, created_at, day, point }, index) => {
+                    return (
+                      <View
+                        key={index}
+                        className='item at-row at-row__justify--between at-row__align--center'
+                      >
+                        <Image className='avatar' src={avatar} />
+                        <View className='user at-col'>
+                          <View className='user-name'>{nickname}</View>
+                          <View className='signin-time'>{created_at}</View>
+                        </View>
+                        <View className='reward'>
+                          <View className='days'>连续签到{day}天</View>
+                          <View className='coin'>奖励{point}积分</View>
+                        </View>
                       </View>
-                      <View className='reward'>
-                        <View className='days'>连续签到1天</View>
-                        <View className='coin'>奖励100积分</View>
-                      </View>
-                    </View>
-                  );
-                })}
+                    );
+                  }
+                )}
               </View>
             </AtTabsPane>
           </AtTabs>

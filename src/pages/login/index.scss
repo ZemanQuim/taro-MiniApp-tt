@@ -1,0 +1,50 @@
+.login {
+  min-height: 100vh;
+  background-color: #3a466a;
+  padding-top: 138px;
+  padding-left: 36px;
+  padding-right: 36px;
+  .logo-wrap {
+    width: 676px;
+    height: 270px;
+    padding: 0 140px;
+    border-bottom: 2px solid #4f88ae;
+    .logo {
+      width: 400px;
+      height: 220px;
+    }
+  }
+  .title {
+    margin-top: 100px;
+    margin-left: 16px;
+    color: #ffffff;
+    font-size: 36px;
+  }
+  .info {
+    color: #ffffff;
+    font-size: 36px;
+    margin-top: 40px;
+    margin-left: 16px;
+    opacity: 0.8;
+  }
+  .login-btn {
+    width: 652px;
+    height: 84px;
+    margin: 88px auto 0;
+    background-color: #f85a59;
+    text-align: center;
+    line-height: 84px;
+    font-size: 34px;
+    color: #fff;
+    border-radius: 42px;
+  }
+  .protocol {
+    margin-top: 328px;
+    text-align: center;
+    font-size: 28px;
+    color: #d8d6d6;
+    .item {
+      color: #1a9ddd;
+    }
+  }
+}

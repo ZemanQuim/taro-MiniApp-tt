@@ -16,7 +16,11 @@ class Index extends Component {
   }
   componentWillMount() {}
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { counterStore } = this.props.store;
+    counterStore.getRankingList({ type: 1 });
+    counterStore.getRankingList({ type: 2 });
+  }
 
   componentWillUnmount() {}
 
@@ -31,8 +35,9 @@ class Index extends Component {
   };
   render() {
     const tabList = [{ title: '猜对电影榜' }, { title: '查看电影榜' }];
-
-    const boardList = [{}, {}, {}, {}, {}, {}, {}];
+    const { counterStore } = this.props.store;
+    const { guessRankingList, seeRankingList } = counterStore;
+    // const boardList = [{}, {}, {}, {}, {}, {}, {}];
 
     return (
       <View className='leaderboard'>
@@ -43,19 +48,18 @@ class Index extends Component {
         >
           <AtTabsPane current={this.state.current} index={0}>
             <View className='content-wrap'>
-              {boardList.map((item, index) => {
+              {guessRankingList.map((item, index) => {
                 return (
                   <View
                     key={index}
                     className='item at-row at-row__justify--between at-row__align--center'
                   >
                     <View className='number'>{index + 1}</View>
-                    <Image
-                      className='avatar'
-                      src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
-                    />
-                    <View className='username at-col'>不管三七二十一</View>
-                    <View className='right'>猜对322部</View>
+                    <Image className='avatar' src={item?.user.avatar} />
+                    <View className='username at-col'>
+                      {item?.user.nickname}
+                    </View>
+                    <View className='right'>猜对{item?.num}部</View>
                   </View>
                 );
               })}
@@ -63,19 +67,18 @@ class Index extends Component {
           </AtTabsPane>
           <AtTabsPane current={this.state.current} index={1}>
             <View className='content-wrap'>
-              {boardList.map((item, index) => {
+              {seeRankingList.map((item, index) => {
                 return (
                   <View
                     key={index}
                     className='item at-row at-row__justify--between at-row__align--center'
                   >
                     <View className='number'>{index + 1}</View>
-                    <Image
-                      className='avatar'
-                      src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
-                    />
-                    <View className='username at-col'>不管三七二十一</View>
-                    <View className='right'>猜对322部</View>
+                    <Image className='avatar' src={item?.user.avatar} />
+                    <View className='username at-col'>
+                      {item?.user.nickname}
+                    </View>
+                    <View className='right'>查看{item?.num}部</View>
                   </View>
                 );
               })}
