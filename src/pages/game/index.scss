@@ -81,6 +81,7 @@
       // padding: 0 60px 18px;
       padding-left: 60px;
       padding-right: 20px;
+      min-height: 443px;
       .word {
         height: 92px;
         width: 92px;
@@ -95,6 +96,12 @@
         //   margin-right: 0;
         // }
       }
+    }
+    .gameover {
+      display: block;
+      margin: 0 auto;
+      width: 191px;
+      height: 191px;
     }
   }
 }

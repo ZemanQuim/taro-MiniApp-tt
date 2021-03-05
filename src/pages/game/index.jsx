@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Taro from '@tarojs/taro';
-import { View, Text, Video } from '@tarojs/components';
+// import Taro from '@tarojs/taro';
+import { View, Text, Video, Image } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import './index.scss';
 
@@ -57,15 +57,14 @@ class Index extends Component {
     if (myAnwser.join('').length === exactAnwser.length) {
       if (myAnwser.join('') === exactAnwser) {
         console.log('回答正确');
+        //结束
+        this.setState({
+          isGameOver: true,
+        });
       } else {
         console.log('回答错误');
       }
       counterStore.anwser({ words: myAnwser.join(''), movie_id: oneMovie.id });
-
-      //结束
-      this.setState({
-        isGameOver: true,
-      });
     }
   };
 
@@ -89,17 +88,16 @@ class Index extends Component {
     const { counterStore } = this.props.store;
     const { oneMovie } = counterStore;
     await counterStore.watchAnwser({ movie_id: oneMovie.id });
-    const { exactAnwser } = counterStore;
-    this.setState({
-      myAnwser: [...exactAnwser],
-      isGameOver: true,
-    });
-    Taro.showToast({ title: '查看成功', duration: 1500 });
+    const { exactAnwser, isWatch } = counterStore;
+    isWatch &&
+      this.setState({
+        myAnwser: [...exactAnwser],
+      });
   };
 
   render() {
     const {
-      counterStore: { oneMovie, point, words },
+      counterStore: { oneMovie, point, words, isWatch },
     } = this.props.store;
     let poster =
       oneMovie.url + '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_205,m_fast';
@@ -158,19 +156,29 @@ class Index extends Component {
               );
             })}
           </View>
-          <View className='options at-row at-row--wrap at-row__justify--between'>
-            {words?.map((item, index) => {
-              return (
-                <View
-                  className='word'
-                  key={index}
-                  onClick={this.wordClick.bind(this, item)}
-                >
-                  {item}
-                </View>
-              );
-            })}
-          </View>
+
+          {isWatch ? (
+            <View className='options'>
+              <Image
+                className='gameover'
+                src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/game-over.png'
+              />
+            </View>
+          ) : (
+            <View className='options at-row at-row--wrap at-row__justify--between'>
+              {words?.map((item, index) => {
+                return (
+                  <View
+                    className='word'
+                    key={index}
+                    onClick={this.wordClick.bind(this, item)}
+                  >
+                    {item}
+                  </View>
+                );
+              })}
+            </View>
+          )}
         </View>
       </View>
     );

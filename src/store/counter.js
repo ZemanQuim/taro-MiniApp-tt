@@ -21,8 +21,12 @@ class counterStore {
   @observable point = 0; //当前积分余额
   @observable words = []; //可选文字
   @observable exactAnwser = ''; //准确答案
+  @observable isWatch = false; //是否查看答案
   @observable pointRecord = []; //积分明细
   @observable isSignToday = 0; //今日是否签到 1-已经签到 0-未签到
+  @observable signInSuccess = false; //签到成功?
+  @observable signInDay = 1; //连续签到天数
+  @observable signInPoint = 100; //签到奖励
   @observable todaySignin = []; //今日签到列表
   @observable continuousSignin = []; //连续签到列表
 
@@ -80,12 +84,17 @@ class counterStore {
 
   //猜一部电影
   @action getOneMovie = async () => {
+    Taro.showLoading({
+      title: '加载中',
+    });
     try {
       const res = await getOneMovie();
+      Taro.hideLoading();
       runInAction(() => {
         this.oneMovie = res.data.movie;
         this.point = res.data.point;
         this.words = res.data.words;
+        this.isWatch = false;
       });
     } catch (error) {}
   };
@@ -95,8 +104,11 @@ class counterStore {
     try {
       const { data } = await anwser(postData);
       data.state == 1
-        ? Taro.showToast({ title: '回答正确' })
-        : Taro.showToast({ title: '回答错误', icon: 'none' });
+        ? Taro.showToast({ title: '答对加5分', duration: 2000 })
+        : Taro.showToast({
+            title: '答错扣10分',
+            icon: 'fail',
+          });
       runInAction(() => {
         this.point = data.point;
       });
@@ -107,9 +119,19 @@ class counterStore {
   @action watchAnwser = async (postData) => {
     try {
       const res = await watchAnwser(postData);
-      runInAction(() => {
-        this.exactAnwser = res.data.title;
-      });
+      if (res.code == 200) {
+        runInAction(() => {
+          this.exactAnwser = res.data.movie.title;
+          this.point = res.data.point;
+          this.isWatch = true;
+        });
+        Taro.showToast({ title: '查看成功', duration: 1500 });
+      } else {
+        runInAction(() => {
+          this.isWatch = false;
+        });
+        Taro.showToast({ title: '积分不足', icon: 'fail' });
+      }
     } catch (error) {}
   };
 
@@ -128,11 +150,14 @@ class counterStore {
           duration: 2000,
         });
         runInAction(() => {
-          this.signInState = 1;
+          this.isSignToday = 1;
+          this.signInSuccess = true;
+          this.signInDay = res.data.day;
+          this.signInPoint = res.data.point;
         });
       } else {
         runInAction(() => {
-          this.signInState = 2;
+          this.signInSuccess = false;
         });
         Taro.showToast({
           title: '已签到,明天签到奖励更多',
@@ -154,6 +179,7 @@ class counterStore {
   @action signInRankingList = async (getData) => {
     try {
       const { data } = await signInRankingList(getData);
+      // Taro.setStorage({ key: 'isSignToday', data: data.isSignToday });
       runInAction(() => {
         this.isSignToday = data.isSignToday;
         if (getData.type == 1) {

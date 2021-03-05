@@ -12,7 +12,9 @@ const config = {
   plugins: [],
   defineConstants: {},
   copy: {
-    patterns: [],
+    patterns: [
+      { from: 'src/assets/', to: 'dist/assets' }, // 指定需要 copy 的文件
+    ],
     options: {},
   },
   framework: 'react',

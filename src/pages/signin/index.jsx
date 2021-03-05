@@ -49,31 +49,45 @@ class Index extends Component {
   //签到
   _signClick = () => {
     const { counterStore } = this.props.store;
-    Taro.showModal({
-      title: '签到领积分',
-      content: '签到有广告,看完广告才有积分奖励\n点击确定完成签到',
-      confirmColor: '#FD2C57',
-      success: function (res) {
-        if (res.confirm) {
-          console.log('用户点击确定');
-          counterStore.signIn();
-        } else if (res.cancel) {
-          console.log('用户点击取消');
-        }
-      },
-    });
+    // Taro.showModal({
+    //   title: '签到领积分',
+    //   content: '签到暂时无广告,看完广告才有积分奖励\n点击确定完成签到',
+    //   confirmColor: '#FD2C57',
+    //   success: function (res) {
+    //     if (res.confirm) {
+    //       console.log('用户点击确定');
+    //       counterStore.signIn();
+    //     } else if (res.cancel) {
+    //       console.log('用户点击取消');
+    //     }
+    //   },
+    // });
+    counterStore.signIn();
   };
 
   render() {
     const tabList = [{ title: '今日签到' }, { title: '连续签到' }];
     const {
-      counterStore: { isSignToday, todaySignin, continuousSignin },
+      counterStore: {
+        isSignToday,
+        signInSuccess,
+        signInDay,
+        signInPoint,
+        todaySignin,
+        continuousSignin,
+      },
     } = this.props.store;
     return (
       <View className='signin'>
-        <View className='signin-btn' onClick={this._signClick.bind(this)}>
-          {isSignToday == 0 ? '点击签到领积分' : '你今天已经签到了!'}
-        </View>
+        {signInSuccess ? (
+          <View className='signin-btn' onClick={this._signClick.bind(this)}>
+            签到成功!连续签到{signInDay}天,奖励{signInPoint}
+          </View>
+        ) : (
+          <View className='signin-btn' onClick={this._signClick.bind(this)}>
+            {isSignToday == 0 ? '点击签到领积分' : '你今天已经签到了!'}
+          </View>
+        )}
         <Text className='rule' onClick={this._ruleClick.bind(this)}>
           签到奖励规则
         </Text>
