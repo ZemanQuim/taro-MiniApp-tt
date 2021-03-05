@@ -10,7 +10,8 @@ import './index.scss';
 class Index extends Component {
   componentWillMount() {
     const { authStore } = this.props.store;
-    authStore.getUserInfo();
+    const { isLogin } = authStore;
+    isLogin && authStore.getUserInfo();
   }
 
   componentDidMount() {
@@ -36,6 +37,7 @@ class Index extends Component {
 
   _login = () => {
     const { authStore } = this.props.store;
+    const { isLogin } = authStore;
     Taro.login({
       success: function (res) {
         if (res.code) {
@@ -45,7 +47,7 @@ class Index extends Component {
                 // 用户已授权
                 console.log('用户已授权');
                 await authStore.login({ code: res.code });
-                authStore.getUserInfo();
+                isLogin && authStore.getUserInfo();
               } else {
                 // 用户未授权
                 console.log('用户未授权');

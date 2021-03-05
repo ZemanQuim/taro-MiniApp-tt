@@ -46,11 +46,16 @@ class authStore {
   @action login = async (postData) => {
     try {
       const res = await login(postData);
-      runInAction(() => {
-        Taro.setStorage({ key: 'TOKEN', data: res.data.openid });
-        // this.openid = res.data.openid;
-        this.isLogin = true;
-      });
+      if (res.code == 200) {
+        runInAction(() => {
+          Taro.setStorage({ key: 'TOKEN', data: res.data.openid });
+          // this.openid = res.data.openid;
+          this.isLogin = true;
+        });
+        Taro.showToast({ title: '登录成功' });
+      } else {
+        Taro.showToast({ title: res.message, icon: 'fail' });
+      }
     } catch (err) {
       console.error(err);
     }

@@ -94,7 +94,7 @@ class Index extends Component {
                 loop={false}
                 muted={false}
                 showFullscreenBtn={false}
-                showPlayBtn={false}
+                showPlayBtn
                 enableProgressGesture={false}
                 showProgress={false}
               />

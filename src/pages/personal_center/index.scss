@@ -40,7 +40,20 @@
     color: #fff;
     line-height: 68px;
     font-size: 32px;
+    &:active {
+      background-color: rgba(36, 228, 36, 1);
+    }
   }
+
+  .at-list__item {
+    &::after {
+      border-color: #32bbb4;
+    }
+    &:active {
+      background-color: #3f476b;
+    }
+  }
+
   .movie {
     width: 726px;
     height: 432px;
@@ -59,6 +72,19 @@
       height: 110px;
       line-height: 110px;
     }
+    .list-item {
+      color: #32bbb4;
+    }
+    .contact-button {
+      display: inline-block;
+      position: absolute;
+      right: 40px;
+      width: 616px;
+      height: 100px;
+      // background: salmon;
+      opacity: 0;
+      z-index: 99;
+    }
   }
   .coin-list {
     width: 710px;
@@ -67,7 +93,7 @@
     background-color: #524b72;
     border: 2px solid #3d395e;
     border-radius: 12px;
-    box-shadow: 0 0 24px #1a284d;
+    box-shadow: 0 0 12px #1a284d;
     overflow: auto;
     padding: 30px 50px;
     .list-title {

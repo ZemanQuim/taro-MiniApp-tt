@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, Image, Button } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Taro from '@tarojs/taro';
-import { AtIcon } from 'taro-ui';
+// import { AtIcon } from 'taro-ui';
+import { AtList, AtListItem } from 'taro-ui';
 import './index.scss';
 
 @inject('store')
@@ -42,9 +43,9 @@ class Index extends Component {
     Taro.navigateBack({
       success: (res) => {
         console.log(res);
+        Taro.showToast({ title: '退出成功' });
       },
     });
-    Taro.showToast({ title: '退出成功' });
   };
 
   render() {
@@ -76,26 +77,31 @@ class Index extends Component {
             退出登录
           </Button>
         </View>
-        <View className='movie'>
-          <View
-            className='watched at-row at-row__justify--between at-row__align--center'
+
+        <AtList hasBorder={false} className='movie'>
+          <AtListItem
+            customStyle={{ backgroundColor: '#333' }}
+            className='list-item'
+            title='我查看的电影'
+            arrow='right'
+            iconInfo={{ size: 25, color: '#ffffff', value: 'heart' }}
             onClick={this._watchedHandle.bind(this)}
-          >
-            <Text>我查看的电影</Text>
-            <AtIcon value='heart' size='30' color='#fff'></AtIcon>
-          </View>
-          <View
-            className='guessed at-row at-row__justify--between at-row__align--center'
+          />
+          <AtListItem
+            className='list-item'
+            title='我猜对的电影'
+            arrow='right'
+            iconInfo={{ size: 25, color: '#ffffff', value: 'list' }}
             onClick={this._guessedHandle.bind(this)}
-          >
-            <Text>我猜对的电影</Text>
-            <AtIcon value='list' size='30' color='#fff'></AtIcon>
-          </View>
-          <View className='customer at-row at-row__justify--between at-row__align--center'>
-            <Text>联系在线客服</Text>
-            <AtIcon value='message' size='30' color='#fff'></AtIcon>
-          </View>
-        </View>
+          />
+          <Button className='contact-button' openType='contact'></Button>
+          <AtListItem
+            className='list-item'
+            title='联系在线客服'
+            arrow='right'
+            iconInfo={{ size: 25, color: '#ffffff', value: 'message' }}
+          />
+        </AtList>
         <View className='coin-list'>
           <View className='list-title at-row at-row__justify--around at-row__align--center'>
             <View className='title-coin'>积分记录</View>
