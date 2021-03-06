@@ -8,11 +8,7 @@ import './index.scss';
 @inject('store')
 @observer
 class Index extends Component {
-  componentWillMount() {
-    const { authStore } = this.props.store;
-    const { isLogin } = authStore;
-    isLogin && authStore.getUserInfo();
-  }
+  componentWillMount() {}
 
   componentDidMount() {
     // const { authStore } = this.props.store;
@@ -31,13 +27,16 @@ class Index extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  componentDidShow() {
+    const { authStore } = this.props.store;
+    authStore.getUserInfo();
+  }
 
   componentDidHide() {}
 
   _login = () => {
     const { authStore } = this.props.store;
-    const { isLogin } = authStore;
+
     Taro.login({
       success: function (res) {
         if (res.code) {
@@ -45,8 +44,9 @@ class Index extends Component {
             success: async (result) => {
               if (result.authSetting['scope.userInfo'] === true) {
                 // 用户已授权
-                console.log('用户已授权');
+                console.log('用户已授权', res.code);
                 await authStore.login({ code: res.code });
+                const { isLogin } = authStore;
                 isLogin && authStore.getUserInfo();
               } else {
                 // 用户未授权

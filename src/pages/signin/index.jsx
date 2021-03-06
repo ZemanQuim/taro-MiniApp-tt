@@ -18,7 +18,7 @@ class Index extends Component {
 
   componentWillMount() {
     const { counterStore } = this.props.store;
-    counterStore.signInRankingList({ type: this.state.current + 1 });
+    counterStore.signInRankingList({ type: 1 });
   }
 
   componentDidMount() {}
@@ -34,6 +34,8 @@ class Index extends Component {
     this.setState({
       current: value,
     });
+    const { counterStore } = this.props.store;
+    counterStore.signInRankingList({ type: value + 1 });
   };
 
   //规则

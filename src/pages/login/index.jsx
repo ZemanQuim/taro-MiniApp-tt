@@ -44,19 +44,36 @@ class Index extends Component {
             success: () => {
               Taro.showToast({ title: '登录成功' });
               authStore.getUserInfo();
+              // authStore.changeState({ isLogin: true });
               Taro.redirectTo({
                 url: '../index/index',
               });
             },
-            fail: (resp) => {
-              console.log('授权失败！', resp);
-              Taro.openSetting();
+            fail: () => {
+              this.openSetting();
             },
+          });
+        } else {
+          console.log('已授权');
+          Taro.redirectTo({
+            url: '../index/index',
           });
         }
       },
       fail(res) {
         console.log(`getSetting 调用失败`, res);
+      },
+    });
+  }
+
+  openSetting() {
+    Taro.openSetting({
+      success: function (res) {
+        console.log('查看权限列表', res.authSetting);
+        // res.authSetting = {
+        //   "scope.userInfo": true,
+        //   "scope.userLocation": true
+        // }
       },
     });
   }

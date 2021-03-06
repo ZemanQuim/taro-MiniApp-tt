@@ -57,13 +57,13 @@ class Index extends Component {
     if (myAnwser.join('').length === exactAnwser.length) {
       if (myAnwser.join('') === exactAnwser) {
         console.log('回答正确');
-        //结束
-        this.setState({
-          isGameOver: true,
-        });
       } else {
         console.log('回答错误');
       }
+      //结束
+      this.setState({
+        isGameOver: true,
+      });
       counterStore.anwser({ words: myAnwser.join(''), movie_id: oneMovie.id });
     }
   };

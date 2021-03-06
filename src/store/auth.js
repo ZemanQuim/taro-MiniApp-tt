@@ -48,7 +48,8 @@ class authStore {
       const res = await login(postData);
       if (res.code == 200) {
         runInAction(() => {
-          Taro.setStorage({ key: 'TOKEN', data: res.data.openid });
+          Taro.setStorage({ key: 'OPENID', data: res.data.openid });
+          Taro.setStorage({ key: 'SESSION_KEY', data: res.data.session_key });
           // this.openid = res.data.openid;
           this.isLogin = true;
         });
