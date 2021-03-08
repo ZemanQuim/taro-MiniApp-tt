@@ -10,9 +10,9 @@ const getBaseUrl = (url) => {
   } else {
     // 生产环境
     if (url.includes('/api/')) {
-      BASE_URL = 'http://guess-movie-api.lkd2020.cn';
+      BASE_URL = 'https://guess-movie-api.lkd2020.cn';
     } else {
-      BASE_URL = 'http://guess-movie-api.lkd2020.cn';
+      BASE_URL = 'https://guess-movie-api.lkd2020.cn';
     }
   }
   return BASE_URL;

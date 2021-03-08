@@ -32,11 +32,21 @@
       text-align: center;
       margin-right: 36px;
     }
+
     .avatar {
       width: 68px;
       height: 68px;
       margin-right: 24px;
       border-radius: 50%;
+    }
+    .username {
+      display: block;
+      width: 300px;
+      overflow: hidden;
+      /*文本不会换行*/
+      white-space: nowrap;
+      /*当文本溢出包含元素时，以省略号表示超出的文本*/
+      text-overflow: ellipsis;
     }
     .right {
       width: 150px;

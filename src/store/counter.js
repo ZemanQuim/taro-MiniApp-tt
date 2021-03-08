@@ -159,17 +159,12 @@ class counterStore {
         runInAction(() => {
           this.signInSuccess = false;
         });
-        Taro.showToast({
-          title: '已签到,明天签到奖励更多',
-          icon: 'none',
-          duration: 2000,
-        });
       }
     } catch (error) {
       Taro.hideLoading();
       Taro.showToast({
         title: '签到失败',
-        icon: 'info',
+        icon: 'fail',
         duration: 2000,
       });
     }
