@@ -21,7 +21,11 @@ class Index extends Component {
     counterStore.signInRankingList({ type: 1 });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    setTimeout(() => {
+      this._ruleClick();
+    }, 500);
+  }
 
   componentWillUnmount() {}
 
@@ -45,6 +49,11 @@ class Index extends Component {
       content:
         '每天签到奖励100积分\n连续签到30天再送10元话费\n连续签到180天再送50元话费\n话费领取:在个人中心联系客服\n连续签到中间断签，从头开始计\n签到有广告，看完广告才有奖励',
       confirmColor: '#FD2C57',
+      success: (res) => {
+        if (res.confirm) {
+          this._signClick();
+        }
+      },
     });
   };
 
@@ -60,37 +69,27 @@ class Index extends Component {
       });
       return false;
     }
-    Taro.showModal({
-      title: '签到领积分',
-      content: '签到有广告,看完广告才有积分奖励\n点击确定完成签到',
-      confirmColor: '#FD2C57',
-      success: function (res) {
-        if (res.confirm) {
-          // 创建激励视频
-          const videoAd = Taro.createRewardedVideoAd({
-            adUnitId: '1cc8wlr6hjyl99n6i8',
-          });
-          // 广告创建后默认是隐藏的，可以通过该方法显示广告
-          videoAd.show();
-          //捕捉错误
-          videoAd.onError((err) => {
-            // 进行适当的提示
-            Taro.showToast({ title: '加载错误', icon: 'fail' });
-          });
-          // 监听关闭
-          videoAd.onClose((status) => {
-            if ((status && status.isEnded) || status === undefined) {
-              // 正常播放结束，下发奖励
-              counterStore.signIn();
-            } else {
-              // 播放中途退出，进行提示
-              Taro.showToast({ title: '签到失败', icon: 'fail' });
-            }
-          });
-        } else if (res.cancel) {
-          console.log('用户点击取消');
-        }
-      },
+
+    //创建广告
+    const videoAd = Taro.createRewardedVideoAd({
+      adUnitId: '1cc8wlr6hjyl99n6i8',
+    });
+    // 广告创建后默认是隐藏的，可以通过该方法显示广告
+    videoAd.show();
+    //捕捉错误
+    videoAd.onError((err) => {
+      // 进行适当的提示
+      Taro.showToast({ title: '加载错误', icon: 'fail' });
+    });
+    // 监听关闭
+    videoAd.onClose((status) => {
+      if ((status && status.isEnded) || status === undefined) {
+        // 正常播放结束，下发奖励
+        counterStore.signIn();
+      } else {
+        // 播放中途退出，进行提示
+        Taro.showToast({ title: '签到失败', icon: 'fail' });
+      }
     });
   };
 

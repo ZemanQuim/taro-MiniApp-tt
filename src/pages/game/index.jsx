@@ -84,52 +84,30 @@ class Index extends Component {
     });
   };
 
-  _watchMovieTitle = () => {
+  _watchMovieTitle = async () => {
     const { counterStore } = this.props.store;
     const { oneMovie } = counterStore;
-    // await counterStore.watchAnwser({ movie_id: oneMovie.id });
-    // const { exactAnwser, isWatch } = counterStore;
-    // isWatch &&
-    //   this.setState({
-    //     myAnwser: [...exactAnwser],
-    //   });
-    Taro.showModal({
-      title: '查看电影名称',
-      content: '查看电影名称有广告\n看完广告知道答案\n点击确定查看电影名称',
-      confirmColor: '#FD2C57',
-      success: (res) => {
-        if (res.confirm) {
-          // 创建激励视频
-          const videoAd = Taro.createRewardedVideoAd({
-            adUnitId: '1cc8wlr6hjyl99n6i8',
-          });
-          // 广告创建后默认是隐藏的，可以通过该方法显示广告
-          videoAd.show();
-          //捕捉错误
-          videoAd.onError((err) => {
-            // 进行适当的提示
-            Taro.showToast({ title: '加载错误', icon: 'fail' });
-          });
-          // 监听关闭
-          videoAd.onClose(async (status) => {
-            if ((status && status.isEnded) || status === undefined) {
-              // 正常播放结束，下发奖励
-              await counterStore.watchAnwser({ movie_id: oneMovie.id });
-              const { exactAnwser, isWatch } = counterStore;
-              isWatch &&
-                this.setState({
-                  myAnwser: [...exactAnwser],
-                });
-            } else {
-              // 播放中途退出，进行提示
-              Taro.showToast({ title: '查看失败', icon: 'fail' });
-            }
-          });
-        } else if (res.cancel) {
-          console.log('用户点击取消');
-        }
-      },
-    });
+    await counterStore.watchAnwser({ movie_id: oneMovie.id });
+    const { exactAnwser, isWatch } = counterStore;
+    if (isWatch) {
+      this.setState({
+        myAnwser: [...exactAnwser],
+        isGameOver: true,
+      });
+    } else {
+      Taro.showModal({
+        title: '您的积分不足100',
+        content: '查看电影名称需要100积分\n完成签到奖励100积分',
+        confirmColor: '#FD2C57',
+        success: (res) => {
+          if (res.confirm) {
+            Taro.navigateTo({ url: '../signin/index' });
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        },
+      });
+    }
   };
 
   render() {
@@ -156,8 +134,9 @@ class Index extends Component {
             controls
             loop={false}
             muted={false}
-            showFullscreenBtn={false}
-            showPlayBtn={false}
+            showFullscreenBtn
+            showPlayBtn
+            playBtnPosition='center'
             enableProgressGesture={false}
             showProgress={false}
           />

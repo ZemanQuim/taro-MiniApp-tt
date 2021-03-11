@@ -8,7 +8,20 @@ import './index.scss';
 @inject('store')
 @observer
 class Index extends Component {
-  componentWillMount() {}
+  componentWillMount() {
+    Taro.showShareMenu({
+      // withShareTicket: true,
+      success(res) {
+        console.log('已成功显示转发按钮');
+      },
+      fail(err) {
+        console.log('showShareMenu 调用失败', err.errMsg);
+      },
+      complete(res) {
+        console.log('showShareMenu 调用完成');
+      },
+    });
+  }
 
   componentDidMount() {
     // const { authStore } = this.props.store;
@@ -33,6 +46,30 @@ class Index extends Component {
   }
 
   componentDidHide() {}
+
+  //分享
+  onShareAppMessage(res) {
+    if (res.from === 'button') {
+      return {
+        channel: 'video', // 必写 video
+        templateId: '12kbbinj6h1oib3cad', // 分享的模版 id
+        title: '快来猜猜看', // 分享的标题
+        desc: '猜片名有奖励', // 分享的内容介绍
+        path: `/pages/index/index`, // 分享的路径
+        extra: {
+          videoTopics: ['片名猜猜猜', '电影猜猜猜'], // 只有抖音才会有的属性
+        },
+      };
+    } else {
+      // 右上角分享
+      return {
+        templateId: '12kbbinj6h1oib3cad', //分享的模版 id
+        title: '快来猜猜看', //分享的标题
+        desc: '猜片名有奖励', // 分享的内容
+        path: `/pages/index/index`, // 分享的路径
+      };
+    }
+  }
 
   _login = () => {
     const { authStore } = this.props.store;
@@ -67,12 +104,6 @@ class Index extends Component {
   // _invite = () => {
   //   console.log('邀请好友');
   // };
-
-  _ruleHandle = () => {
-    Taro.navigateTo({
-      url: '../game_rule/index',
-    });
-  };
 
   _signinHandle = () => {
     const {
@@ -178,9 +209,7 @@ class Index extends Component {
             )}
           </View>
         </View>
-        <View className='game-rule' onClick={this._ruleHandle.bind(this)}>
-          游戏规则
-        </View>
+
         <View className='quiz-box' onClick={this._gameHandle.bind(this)}>
           <Image
             className='quiz'
@@ -232,6 +261,22 @@ class Index extends Component {
         //   <Text className='text'>邀请好友一起猜</Text>
         // </View>
         null}
+        <View className='game-rule'>
+          <View className='title'>
+            <Text className='text'>游戏规则</Text>
+          </View>
+          <View className='content'>
+            <View className='rule rule1'>
+              1.竞猜玩法：猜对电影奖励5积分，猜错电影扣10积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
+            </View>
+            <View className='rule rule2'>
+              2.积分用途：积分用于猜电影片名和查看电影名称，初始积分100分，每日签到奖励100积分，连续签到越多奖励越多；
+            </View>
+            <View className='rule rule3'>
+              3.签到规则：签到即奖励100积分，连续签到中断签到，从头开始计。
+            </View>
+          </View>
+        </View>
       </View>
     );
   }

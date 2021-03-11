@@ -130,7 +130,7 @@ class counterStore {
         runInAction(() => {
           this.isWatch = false;
         });
-        Taro.showToast({ title: '积分不足', icon: 'fail' });
+        // Taro.showToast({ title: '积分不足', icon: 'fail' });
       }
     } catch (error) {}
   };

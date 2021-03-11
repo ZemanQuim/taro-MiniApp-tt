@@ -60,3 +60,14 @@ export const signIn = () => {
 export const signInRankingList = (getData) => {
   return HTTPREQUEST.get('/api/sign/ranking_list', getData);
 };
+
+//落地页----------------
+
+//一部电影
+export const getGoalMovie = (getData) => {
+  return HTTPREQUEST.get('/api/goal/get_movie', getData);
+};
+
+export const getGoalRecord = (getData) => {
+  return HTTPREQUEST.get('/api/goal/get_record', getData);
+};

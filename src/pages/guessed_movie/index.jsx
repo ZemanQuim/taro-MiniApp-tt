@@ -93,8 +93,9 @@ class Index extends Component {
                 onPlay={this._onPlay.bind(this)}
                 loop={false}
                 muted={false}
-                showFullscreenBtn={false}
+                showFullscreenBtn
                 showPlayBtn
+                playBtnPosition='center'
                 enableProgressGesture={false}
                 showProgress={false}
               />

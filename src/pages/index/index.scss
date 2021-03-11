@@ -23,12 +23,33 @@
   }
 }
 .game-rule {
-  position: absolute;
-  top: 100px;
-  right: 38px;
-  z-index: 333;
-  font-size: 28px;
-  color: #69dcff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 56px;
+  .title {
+    width: 476px;
+    height: 10px;
+    background-image: url('../../assets/rule_bg.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+    text-align: center;
+    .text {
+      text-align: center;
+      position: relative;
+      top: -20px;
+    }
+  }
+  .content {
+    padding-top: 34px;
+    .rule {
+      font-size: 24px;
+      color: #ffffff;
+      opacity: 0.7;
+      margin-bottom: 10px;
+    }
+  }
 }
 .quiz {
   width: 100%;

@@ -53,7 +53,7 @@ class authStore {
           // this.openid = res.data.openid;
           this.isLogin = true;
         });
-        Taro.showToast({ title: '登录成功' });
+        // Taro.showToast({ title: '登录成功' });
       } else {
         Taro.showToast({ title: res.message, icon: 'fail' });
       }

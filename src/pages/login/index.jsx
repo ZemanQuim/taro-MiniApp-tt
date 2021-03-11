@@ -42,7 +42,7 @@ class Index extends Component {
           Taro.authorize({
             scope: 'scope.userInfo',
             success: () => {
-              Taro.showToast({ title: '登录成功' });
+              // Taro.showToast({ title: '登录成功' });
               authStore.getUserInfo();
               // authStore.changeState({ isLogin: true });
               Taro.redirectTo({
