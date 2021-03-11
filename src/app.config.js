@@ -1,7 +1,7 @@
 export default {
   pages: [
-    'pages/game_land/index', //落地页
     'pages/index/index', //首页
+    'pages/game_land/index', //落地页
     'pages/login/index', //登录
     'pages/game/index', //游戏
     'pages/signin/index', //签到
@@ -9,6 +9,7 @@ export default {
     'pages/guessed_movie/index', //我猜对的
     'pages/leaderboard/index', //排行榜
     'pages/personal_center/index', //个人中心
+    'pages/user_privacy_policy/index', //用户隐私
   ],
   // tabBar: {
   //   list: [

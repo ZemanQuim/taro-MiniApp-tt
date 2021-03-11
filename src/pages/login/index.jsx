@@ -34,6 +34,10 @@ class Index extends Component {
     });
   };
 
+  _userPrivacy = () => {
+    Taro.navigateTo({ url: '../user_privacy_policy/index' });
+  };
+
   getSetting() {
     const { authStore } = this.props.store;
     Taro.getSetting({
@@ -93,7 +97,10 @@ class Index extends Component {
           授权登录
         </View>
         <View className='protocol'>
-          登录代表您已同意<Text className='item'>《用户协议》《用户政策》</Text>
+          登录代表您已同意
+          <Text className='item' onClick={this._userPrivacy.bind(this)}>
+            《用户协议》《用户政策》
+          </Text>
         </View>
       </View>
     );

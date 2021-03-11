@@ -88,7 +88,7 @@ class Index extends Component {
               } else {
                 // 用户未授权
                 console.log('用户未授权');
-                Taro.redirectTo({
+                Taro.reLaunch({
                   url: '../login/index',
                 });
               }

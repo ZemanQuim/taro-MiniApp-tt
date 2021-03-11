@@ -82,10 +82,11 @@ class Index extends Component {
       Taro.showToast({ title: '加载错误', icon: 'fail' });
     });
     // 监听关闭
-    videoAd.onClose((status) => {
+    videoAd.onClose(async (status) => {
       if ((status && status.isEnded) || status === undefined) {
         // 正常播放结束，下发奖励
-        counterStore.signIn();
+        await counterStore.signIn();
+        counterStore.signInRankingList({ type: 1 });
       } else {
         // 播放中途退出，进行提示
         Taro.showToast({ title: '签到失败', icon: 'fail' });

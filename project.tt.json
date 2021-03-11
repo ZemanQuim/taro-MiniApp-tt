@@ -5,9 +5,10 @@
   "appid": "tt946ce2d10b57e063",
   "setting": {
     "urlCheck": true,
-    "es6": false,
+    "es6": true,
     "postcss": false,
-    "minified": false
+    "minified": true,
+    "uploadWithSourceMap": false
   },
   "compileType": "miniprogram"
 }

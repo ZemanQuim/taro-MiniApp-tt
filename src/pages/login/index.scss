@@ -39,7 +39,11 @@
     border-radius: 42px;
   }
   .protocol {
-    margin-top: 328px;
+    position: absolute;
+    width: 560px;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
     font-size: 28px;
     color: #d8d6d6;
