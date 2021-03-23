@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Image } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 
 import { AtTabs, AtTabsPane } from 'taro-ui';
@@ -99,7 +99,6 @@ class Index extends Component {
     const {
       counterStore: {
         isSignToday,
-        signInSuccess,
         signInDay,
         signInPoint,
         todaySignin,
@@ -108,18 +107,19 @@ class Index extends Component {
     } = this.props.store;
     return (
       <View className='signin'>
-        {signInSuccess ? (
+        <View className='signin_header'>
           <View className='signin-btn' onClick={this._signClick.bind(this)}>
-            签到成功!连续签到{signInDay}天,奖励{signInPoint}
+            {isSignToday ? '签到成功' : '点击签到领积分'}
           </View>
-        ) : (
-          <View className='signin-btn' onClick={this._signClick.bind(this)}>
-            {isSignToday == 0 ? '点击签到领积分' : '你今天已经签到了!'}
+          <View className='desc'>
+            {isSignToday
+              ? `连续签到${signInDay}天,奖励${signInPoint}`
+              : '每天签到奖励100积分'}
           </View>
-        )}
-        <Text className='rule' onClick={this._ruleClick.bind(this)}>
-          签到奖励规则
-        </Text>
+          <View className='rule' onClick={this._ruleClick.bind(this)}>
+            签到奖励规则&nbsp;&gt;&gt;
+          </View>
+        </View>
 
         <View className='signin-wrap'>
           <AtTabs

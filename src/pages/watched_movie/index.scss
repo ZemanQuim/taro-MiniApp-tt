@@ -1,6 +1,7 @@
 .watched-movie {
-  min-height: 100vh;
-  background-color: #3a466a;
+  height: 100vh;
+  overflow: auto;
+  background: radial-gradient(circle, #b991f6 0%, #ab7cf3 25%, #813cea 100%);
   padding: 12px 0;
   .movie-item {
     width: 100%;
@@ -10,7 +11,7 @@
       width: 690px;
       border-radius: 30px;
       margin: 0 auto;
-      background-color: #496b98;
+      background-color: #4c0085;
       text-align: center;
       line-height: 58px;
       color: #fff;
@@ -28,6 +29,6 @@
     font-size: 24px;
     color: #fff;
     opacity: 0.8;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
 }

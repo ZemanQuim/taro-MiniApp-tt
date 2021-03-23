@@ -346,10 +346,7 @@ class Index extends Component {
             玩法规则
           </View>
           <View className='coin-tip'>
-            <View className='coin'>
-              片名:{index}/{exactAnwser.length}个字
-            </View>
-            <View className='tip'>从下面20个字中选出正确的片名</View>
+            片名:{index}/{exactAnwser.length}个字
           </View>
           <View
             className='next-movie'
@@ -393,6 +390,8 @@ class Index extends Component {
               );
             })}
           </View>
+
+          <View className='tip'>从下面20个字中选出正确的片名</View>
 
           <View className='options at-row at-row--wrap at-row__justify--between'>
             {words?.map((item, i) => {

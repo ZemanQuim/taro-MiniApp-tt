@@ -4,6 +4,7 @@ import { HTTP_STATUS } from './config';
 
 const customInterceptor = (chain) => {
   const requestParams = chain.requestParams;
+  const { url } = requestParams;
 
   return chain.proceed(requestParams).then((res) => {
     // 只要请求成功，不管返回什么状态码，都走这个回调
@@ -21,12 +22,17 @@ const customInterceptor = (chain) => {
       pageToLogin();
       return Promise.reject('需要鉴权');
     } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-      try {
+      // if (process.env.NODE_ENV === 'development') {
+      if (url.includes('login')) {
         let { Authorization } = res.header;
-        Authorization && Taro.setStorageSync('Authorization', Authorization);
-      } catch (e) {
-        console.error(e);
+        Taro.setStorageSync('Authorization', Authorization);
       }
+      // } else {
+      //   if (url.includes('login')) {
+      //     let { authorization } = res.header;
+      //     Taro.setStorageSync('Authorization', authorization);
+      //   }
+      // }
       return res.data;
     }
   });

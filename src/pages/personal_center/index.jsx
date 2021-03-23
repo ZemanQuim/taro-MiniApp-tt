@@ -55,7 +55,7 @@ class Index extends Component {
     } = this.props.store;
     return (
       <View className='personal'>
-        <View className='user-info at-row at-row__align--center'>
+        <View className='user-info '>
           <Image
             className='avatar'
             src={
@@ -64,44 +64,42 @@ class Index extends Component {
                 : 'https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
             }
           />
-          <View className='info at-col'>
+          <View className='info '>
             <View className='username'>
-              {userinfo.nickName ? userinfo.nickName : '游客'}
+              {userinfo.nickName ? userinfo.nickName : '未登录'}
             </View>
             <View className='coin'>积分:{point}</View>
           </View>
-          <Button
-            className='loginout at-col at-col__offset-2'
-            onClick={this._loginOut.bind(this)}
-          >
+          <Button className='loginout ' onClick={this._loginOut.bind(this)}>
             退出登录
           </Button>
         </View>
 
-        <AtList hasBorder={false} className='movie'>
-          <AtListItem
-            customStyle={{ backgroundColor: '#333' }}
-            className='list-item'
-            title='我查看的电影'
-            arrow='right'
-            iconInfo={{ size: 25, color: '#ffffff', value: 'heart' }}
-            onClick={this._watchedHandle.bind(this)}
-          />
-          <AtListItem
-            className='list-item'
-            title='我猜对的电影'
-            arrow='right'
-            iconInfo={{ size: 25, color: '#ffffff', value: 'list' }}
-            onClick={this._guessedHandle.bind(this)}
-          />
-          <Button className='contact-button' openType='contact'></Button>
-          <AtListItem
-            className='list-item'
-            title='联系在线客服'
-            arrow='right'
-            iconInfo={{ size: 25, color: '#ffffff', value: 'message' }}
-          />
-        </AtList>
+        <View className='help_list'>
+          <View className='watched' onClick={this._watchedHandle.bind(this)}>
+            <Image
+              className='icon'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/watched.png'
+            />
+            <View className='text'>我查看的电影</View>
+          </View>
+          <View className='guessed' onClick={this._guessedHandle.bind(this)}>
+            <Image
+              className='icon'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/guessed.png'
+            />
+            <View className='text'>我猜对的电影</View>
+          </View>
+          <View className='service'>
+            <Button className='contact-button' openType='contact'></Button>
+            <Image
+              className='icon'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/service.png'
+            />
+            <View className='text'>联系在线客服</View>
+          </View>
+        </View>
+
         <View className='coin-list'>
           <View className='list-title at-row at-row__justify--around at-row__align--center'>
             <View className='title-coin'>积分记录</View>
@@ -109,18 +107,24 @@ class Index extends Component {
             <View className='title-time'>时间</View>
           </View>
           <View className='list-content'>
-            {pointRecord.map(({ title, point, created_at }, index) => {
+            {pointRecord.map((item, index) => {
               return (
                 <View
                   key={index}
                   className='list-detail at-row at-row__justify--around at-row__align--center'
                 >
-                  <View className='coin_in at-col'>{title}</View>
-                  <View className='coin_num at-col'>{point}</View>
-                  <View className='coin_time at-col'>{created_at}</View>
+                  <View className='coin_in at-col'>{item?.title}</View>
+                  <View className='coin_num at-col'>{item?.point}</View>
+                  <View className='coin_time at-col'>{item?.created_at}</View>
                 </View>
               );
             })}
+            {pointRecord.length == 0 ? (
+              <Image
+                className='null'
+                src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/null.png'
+              />
+            ) : null}
           </View>
         </View>
       </View>

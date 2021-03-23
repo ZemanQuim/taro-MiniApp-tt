@@ -2,41 +2,14 @@ import React, { Component } from 'react';
 import { View, Text, Image } from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import Taro from '@tarojs/taro';
-import { AtAvatar } from 'taro-ui';
 import './index.scss';
 
 @inject('store')
 @observer
 class Index extends Component {
-  componentWillMount() {
-    Taro.showShareMenu({
-      // withShareTicket: true,
-      success(res) {
-        console.log('已成功显示转发按钮');
-      },
-      fail(err) {
-        console.log('showShareMenu 调用失败', err.errMsg);
-      },
-      complete(res) {
-        console.log('showShareMenu 调用完成');
-      },
-    });
-  }
+  componentWillMount() {}
 
-  componentDidMount() {
-    // const { authStore } = this.props.store;
-    // Taro.checkSession({
-    //   success: function () {
-    //     //session_key 未过期，并且在本生命周期一直有效
-    //     console.log('session_key 未过期');
-    //   },
-    //   fail: function () {
-    //     console.log('session_key 已经失效');
-    //     Taro.showToast({ title: '登录失效,请重新登录', icon: 'none' });
-    //     // session_key 已经失效，需要重新执行登录流程
-    //   },
-    // });
-  }
+  componentDidMount() {}
 
   componentWillUnmount() {}
 
@@ -71,9 +44,9 @@ class Index extends Component {
     }
   }
 
+  // 登录
   _login = () => {
     const { authStore } = this.props.store;
-
     Taro.login({
       success: function (res) {
         if (res.code) {
@@ -100,11 +73,7 @@ class Index extends Component {
       },
     });
   };
-
-  // _invite = () => {
-  //   console.log('邀请好友');
-  // };
-
+  // 签到
   _signinHandle = () => {
     const {
       authStore: { isLogin },
@@ -116,11 +85,12 @@ class Index extends Component {
     } else {
       Taro.showModal({
         title: '提示',
-        content: '您未授权登录\n请您确定重新获取授权哦~',
+        content: '您未登录\n请您点击头像登录哦~',
         confirmColor: '#DC0909',
       });
     }
   };
+  // 个人中心
   _personalHandle = () => {
     const {
       authStore: { isLogin },
@@ -132,12 +102,12 @@ class Index extends Component {
     } else {
       Taro.showModal({
         title: '提示',
-        content: '您未授权登录\n请您确定重新获取授权哦~',
+        content: '您未登录\n请您点击头像登录哦~',
         confirmColor: '#DC0909',
       });
     }
   };
-
+  // 排行榜
   _leaderboardHandle = () => {
     const {
       authStore: { isLogin },
@@ -149,23 +119,27 @@ class Index extends Component {
     } else {
       Taro.showModal({
         title: '提示',
-        content: '您未授权登录\n请您确定重新获取授权哦~',
+        content: '您未登录\n请您点击头像登录哦~',
         confirmColor: '#DC0909',
       });
     }
   };
+  // 竞猜
   _gameHandle = () => {
     const {
       authStore: { isLogin },
     } = this.props.store;
     if (isLogin) {
+      // Taro.reLaunch({
+      //   url: '../game_land/index',
+      // });
       Taro.navigateTo({
         url: '../game/index',
       });
     } else {
       Taro.showModal({
         title: '提示',
-        content: '您未授权登录\n请您确定重新获取授权哦~',
+        content: '您未登录\n请您点击头像登录哦~',
         confirmColor: '#DC0909',
       });
     }
@@ -177,21 +151,28 @@ class Index extends Component {
     } = this.props.store;
     return (
       <View className='index'>
+        {/* 头部 */}
         <View className='at-row'>
-          <View className='avatar'>
-            <AtAvatar
-              circle
-              image={
-                userinfo.avatarUrl && isLogin
-                  ? userinfo.avatarUrl
-                  : 'https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
-              }
-            ></AtAvatar>
-          </View>
+          {userinfo.avatarUrl && isLogin ? (
+            <View className='avatar'>
+              <Image className='avatar' src={userinfo.avatarUrl} />
+            </View>
+          ) : (
+            <View className='avatar' onClick={this._login.bind(this)}>
+              <Image
+                className='avatar'
+                src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/user_default.png'
+              />
+            </View>
+          )}
+
           <View className='at-col'>
             <View className='nickName'>
-              {userinfo.nickName && isLogin ? userinfo.nickName : '游客'}
+              {userinfo.nickName && isLogin
+                ? userinfo.nickName
+                : '未登录(点击头像登录)'}
             </View>
+
             {userinfo.nickName && isLogin ? (
               <View className='coin at-row'>
                 <View>
@@ -208,59 +189,39 @@ class Index extends Component {
               <View className='coin'>积分：登录后显示</View>
             )}
           </View>
-        </View>
 
+          <View className='signin' onClick={this._signinHandle.bind(this)}>
+            签到领积分
+          </View>
+        </View>
+        {/* 个人中心 */}
+        <View
+          className='personal_center'
+          onClick={this._personalHandle.bind(this)}
+        >
+          <Image
+            className='personal'
+            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/personal-center.png'
+          />
+        </View>
+        {/* 猜电影 */}
         <View className='quiz-box' onClick={this._gameHandle.bind(this)}>
           <Image
             className='quiz'
-            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/quiz.png'
+            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/quiz_box.png'
           />
         </View>
-        {/* 
-          // 闯关模式
+        {/* 排行榜 */}
         <View
-          className='pass-through-box'
-          onClick={this._gameHandle.bind(this)}
+          className='leaderboard-box'
+          onClick={this._leaderboardHandle.bind(this)}
         >
           <Image
-            className='pass-through'
-            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/pass-through.png'
-          />
-        </View> */}
-        <View className='sign-in-box' onClick={this._signinHandle.bind(this)}>
-          <Image
-            className='sign-in'
-            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/sign-in.png'
+            className='leaderboard'
+            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/leaderboard.png'
           />
         </View>
-        <View className='at-row at-row__justify--between'>
-          <View
-            className='leaderboard-box'
-            onClick={this._leaderboardHandle.bind(this)}
-          >
-            <Image
-              className='leaderboard'
-              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/leaderboard.png'
-            />
-          </View>
-          <View
-            className='personal-center-box'
-            onClick={this._personalHandle.bind(this)}
-          >
-            <Image
-              className='personal-center'
-              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/personal-center.png'
-            />
-          </View>
-        </View>
-        {!isLogin ? (
-          <View className='login-btn' onClick={this._login.bind(this)}>
-            <Text className='text'>您还没登录（点击登录）</Text>
-          </View>
-        ) : // <View className='invite-btn' onClick={this._invite.bind(this)}>
-        //   <Text className='text'>邀请好友一起猜</Text>
-        // </View>
-        null}
+        {/* 底部 */}
         <View className='game-rule'>
           <View className='title'>
             <Text className='text'>游戏规则</Text>

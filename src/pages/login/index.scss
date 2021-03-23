@@ -1,17 +1,16 @@
 .login {
   min-height: 100vh;
-  background-color: #3a466a;
+  background: radial-gradient(circle, #b991f6 0%, #ab7cf3 25%, #813cea 100%)
+    no-repeat;
   padding-top: 138px;
   padding-left: 36px;
   padding-right: 36px;
   .logo-wrap {
     width: 676px;
-    height: 270px;
     padding: 0 140px;
-    border-bottom: 2px solid #4f88ae;
     .logo {
-      width: 400px;
-      height: 220px;
+      width: 453px;
+      height: 362px;
     }
   }
   .title {
@@ -31,7 +30,7 @@
     width: 652px;
     height: 84px;
     margin: 88px auto 0;
-    background-color: #f85a59;
+    background: linear-gradient(360deg, #8c4aec 0%, #f37dda 100%);
     text-align: center;
     line-height: 84px;
     font-size: 34px;
@@ -48,7 +47,7 @@
     font-size: 28px;
     color: #d8d6d6;
     .item {
-      color: #1a9ddd;
+      color: #ff0000;
     }
   }
 }

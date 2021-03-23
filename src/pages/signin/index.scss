@@ -1,38 +1,46 @@
 .signin {
-  background-color: #536186;
-  padding: 22px 25px;
-  .signin-btn {
-    width: 100%;
-    height: 88px;
-    background-color: #f75b5c;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 32px;
-    line-height: 88px;
-    text-align: center;
+  min-height: 100vh;
+  .signin_header {
+    height: 356px;
+    padding-top: 104px;
+    background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/sign_bg.png')
+      no-repeat;
+    background-position: top center;
+    background-size: 100%;
+    .signin-btn {
+      width: 374px;
+      height: 72px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 36px;
+      color: #8a4ce8;
+      font-size: 32px;
+      line-height: 72px;
+      text-align: center;
+    }
+    .desc {
+      margin-top: 50px;
+      font-size: 24px;
+      text-align: center;
+      color: #ffffff;
+    }
+    .rule {
+      margin-top: 18px;
+      font-size: 24px;
+      color: #ffff00;
+      text-align: center;
+    }
   }
-  .rule {
-    position: absolute;
-    top: 124px;
-    right: 64px;
-    font-size: 28px;
-    color: #36b730;
-  }
+
   .signin-wrap {
-    width: 700px;
-    height: 90vh;
-    border-radius: 12px;
-    background-color: #536186;
-    border: 2px solid #3d395e;
-    box-shadow: 0 0 24px #1a284d;
-    margin: 60px auto 0;
-    padding: 25px 35px 0;
+    width: 100%;
     .content-wrap {
-      width: 100%;
-      height: 200px;
+      height: 70vh;
+      padding: 0 50px;
+      overflow: auto;
       .item {
-        height: 118px;
-        border-bottom: 2px solid #9fa8bf;
+        padding: 28px 0;
+        border-bottom: 2px solid #e3e3e3;
         .avatar {
           width: 76px;
           height: 76px;
@@ -42,12 +50,13 @@
         .user {
           .user-name {
             font-size: 24px;
-            color: #ea612c;
+            color: #333333;
+            font-weight: 700;
             line-height: 30px;
           }
           .signin-time {
             font-size: 20px;
-            color: #bccbec;
+            color: #a3a3a3;
             margin-top: 12px;
           }
         }
@@ -55,17 +64,13 @@
           width: 176px;
           font-size: 20px;
           .days {
-            color: #bccbec;
+            color: #a3a3a3;
             line-height: 28px;
           }
           .coin {
-            width: 140px;
-            height: 52px;
-            line-height: 52px;
-            text-align: center;
-            background-color: #37b631;
-            border-radius: 6px;
-            color: #fff;
+            font-size: 24px;
+            margin-top: 12px;
+            color: #ea612c;
           }
         }
       }
@@ -75,16 +80,26 @@
 
 .at-tabs__header {
   padding: 0 80px;
-  background-color: #425575;
+  background-color: #7431db;
   .at-tabs__item {
     color: #cddbed;
     font-size: 28px;
+    &.at-tabs__item--active {
+      font-size: 32px;
+      font-weight: 700;
+      .at-tabs__item-underline {
+        width: 24px;
+        height: 12px;
+        background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/arrow_top.png')
+          no-repeat top center/100%;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 999;
+      }
+    }
   }
 }
 
-.at-tabs__underline {
-  background-color: #3a466a;
-}
 .at-modal__content {
   min-height: auto;
 }

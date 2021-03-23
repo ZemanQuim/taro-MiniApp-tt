@@ -1,47 +1,64 @@
 .leaderboard {
-  min-height: 100vh;
-  background-color: #3a466a;
+  height: 100vh;
+}
+.header {
+  height: 128px;
+  background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/leaderboard_bg.png')
+    no-repeat top center/100%;
+}
+.content {
+  position: relative;
+  top: -92px;
 }
 .at-tabs__header {
-  background-color: #3a466a;
+  background-color: rgba(255, 255, 255, 0);
   .at-tabs__item {
     color: #f5cce4;
     font-size: 28px;
+    &.at-tabs__item--active {
+      font-size: 32px;
+      font-weight: 700;
+      .at-tabs__item-underline {
+        height: 4px;
+        background-color: #ffffff;
+      }
+    }
   }
 }
 
 .at-tabs__underline {
-  background-color: #3a466a;
+  display: none;
 }
 .content-wrap {
   color: #f4fafd;
   font-size: 28px;
-  padding: 20px;
-  background-color: #536186;
+  padding: 0 20px;
+  height: 90vh;
+  overflow: auto;
   .item {
-    margin-bottom: 20px;
-    background-color: #354459;
-    padding: 28px;
-    border-radius: 12px;
+    padding: 20px;
+    border-bottom: 2px solid #e3e3e3;
+    color: #333333;
     .number {
-      width: 65px;
-      height: 65px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background-color: #737c8d;
-      line-height: 65px;
+      background-color: #fbb22a;
+      line-height: 38px;
       text-align: center;
-      margin-right: 36px;
+      margin-right: 20px;
+      color: #ffffff;
     }
-
     .avatar {
-      width: 68px;
-      height: 68px;
-      margin-right: 24px;
+      width: 76px;
+      height: 76px;
+      margin-right: 12px;
       border-radius: 50%;
     }
     .username {
-      display: block;
       width: 300px;
+      margin-right: 50px;
+      font-weight: 700;
       overflow: hidden;
       /*文本不会换行*/
       white-space: nowrap;
@@ -50,6 +67,30 @@
     }
     .right {
       width: 150px;
+    }
+    &:nth-child(1) {
+      .number {
+        height: 50px;
+        background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/record_1.png')
+          no-repeat top center/100%;
+        border-radius: 0%;
+      }
+    }
+    &:nth-child(2) {
+      .number {
+        height: 50px;
+        background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/record_2.png')
+          no-repeat top center/100%;
+        border-radius: 0%;
+      }
+    }
+    &:nth-child(3) {
+      .number {
+        height: 50px;
+        background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/record_3.png')
+          no-repeat top center/100%;
+        border-radius: 0%;
+      }
     }
   }
 }

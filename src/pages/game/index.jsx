@@ -68,8 +68,8 @@ class Index extends Component {
     }
   };
 
+  //开始游戏
   _nextMovie = async () => {
-    //开始游戏
     this.setState({
       isGameOver: false,
     });
@@ -84,6 +84,7 @@ class Index extends Component {
     });
   };
 
+  //查看片名
   _watchMovieTitle = async () => {
     const { counterStore } = this.props.store;
     const { oneMovie } = counterStore;
@@ -149,10 +150,7 @@ class Index extends Component {
           >
             查看电影名
           </View>
-          <View className='coin-tip'>
-            <View className='coin'>我的积分:{point}</View>
-            <View className='tip'>从下面20个字中选出正确的片名</View>
-          </View>
+          <View className='coin-tip'>我的积分:{point}</View>
           <View className='next-movie' onClick={this._nextMovie.bind(this)}>
             猜下一部
           </View>
@@ -172,7 +170,7 @@ class Index extends Component {
               );
             })}
           </View>
-
+          <View className='tip'>从下面20个字中选出正确的片名</View>
           {isWatch ? (
             <View className='options'>
               <Image

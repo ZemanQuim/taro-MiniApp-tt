@@ -41,50 +41,49 @@ class Index extends Component {
 
     return (
       <View className='leaderboard'>
-        <AtTabs
-          current={this.state.current}
-          tabList={tabList}
-          onClick={this.handleClick.bind(this)}
-        >
-          <AtTabsPane current={this.state.current} index={0}>
-            <View className='content-wrap'>
-              {guessRankingList.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    className='item at-row at-row__justify--between at-row__align--center'
-                  >
-                    <View className='number'>{index + 1}</View>
-                    <Image className='avatar' src={item?.user.avatar} />
-                    <View className='username at-col'>
-                      {item?.user.nickname}
+        <View className='header'></View>
+        <View className='content'>
+          <AtTabs
+            current={this.state.current}
+            tabList={tabList}
+            onClick={this.handleClick.bind(this)}
+          >
+            <AtTabsPane current={this.state.current} index={0}>
+              <View className='content-wrap'>
+                {guessRankingList.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      className='item at-row at-row__justify--between at-row__align--center'
+                    >
+                      <View className='number'>{index + 1}</View>
+                      <Image className='avatar' src={item?.user.avatar} />
+                      <View className='username'>{item?.user.nickname}</View>
+                      <View className='right'>猜对{item?.num}部</View>
                     </View>
-                    <View className='right'>猜对{item?.num}部</View>
-                  </View>
-                );
-              })}
-            </View>
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={1}>
-            <View className='content-wrap'>
-              {seeRankingList.map((item, index) => {
-                return (
-                  <View
-                    key={index}
-                    className='item at-row at-row__justify--between at-row__align--center'
-                  >
-                    <View className='number'>{index + 1}</View>
-                    <Image className='avatar' src={item?.user.avatar} />
-                    <View className='username at-col'>
-                      {item?.user.nickname}
+                  );
+                })}
+              </View>
+            </AtTabsPane>
+            <AtTabsPane current={this.state.current} index={1}>
+              <View className='content-wrap'>
+                {seeRankingList.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      className='item at-row at-row__justify--between at-row__align--center'
+                    >
+                      <View className='number'>{index + 1}</View>
+                      <Image className='avatar' src={item?.user.avatar} />
+                      <View className='username'>{item?.user.nickname}</View>
+                      <View className='right'>查看{item?.num}部</View>
                     </View>
-                    <View className='right'>查看{item?.num}部</View>
-                  </View>
-                );
-              })}
-            </View>
-          </AtTabsPane>
-        </AtTabs>
+                  );
+                })}
+              </View>
+            </AtTabsPane>
+          </AtTabs>
+        </View>
       </View>
     );
   }

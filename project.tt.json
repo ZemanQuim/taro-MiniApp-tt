@@ -5,7 +5,7 @@
   "appid": "tt946ce2d10b57e063",
   "setting": {
     "urlCheck": true,
-    "es6": true,
+    "es6": false,
     "postcss": false,
     "minified": true,
     "uploadWithSourceMap": false

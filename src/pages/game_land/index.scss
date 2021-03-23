@@ -55,24 +55,14 @@
       border-bottom-left-radius: 32px;
     }
     .coin-tip {
-      font-size: 20px;
+      width: 229px;
+      height: 50px;
+      font-size: 24px;
+      line-height: 50px;
       color: #fff;
       text-align: center;
-      .coin {
-        width: 229px;
-        height: 32px;
-        background-color: #fa5e2e;
-        border-top-right-radius: 12px;
-        border-top-left-radius: 12px;
-        margin-left: 46px;
-      }
-      .tip {
-        width: 322px;
-        height: 55px;
-        background-color: #222222;
-        line-height: 55px;
-        border-radius: 12px;
-      }
+      background-color: #f9991a;
+      border-radius: 12px;
     }
   }
 
@@ -93,6 +83,18 @@
         text-align: center;
       }
     }
+    .tip {
+      margin: 0 auto 18px;
+      width: 400px;
+      height: 52px;
+      background-color: #332757;
+      line-height: 52px;
+      border-radius: 12px;
+      font-size: 22px;
+      color: #ffffff;
+      text-align: center;
+    }
+
     .options {
       // padding: 0 60px 18px;
       padding-left: 60px;
@@ -101,7 +103,7 @@
       .word {
         height: 92px;
         width: 92px;
-        background-color: #8488a1;
+        background-color: #7a35e3;
         margin-right: 40px;
         margin-bottom: 26px;
         border-radius: 10px;
