@@ -17,9 +17,9 @@ class counterStore {
   @observable seeRankingList = []; //查看排行榜
   @observable myWatchList = []; //我查看的
   @observable myGuessList = []; //我猜对的
-  @observable oneMovie = {}; //当前视频信息
   @observable point = 0; //当前积分余额
-  @observable words = []; //可选文字
+  @observable oneMovie = {}; //当前视频信息
+  @observable words = []; //当前可选文字
   @observable exactAnwser = ''; //准确答案
   @observable isWatch = false; //是否查看答案
   @observable pointRecord = []; //积分明细

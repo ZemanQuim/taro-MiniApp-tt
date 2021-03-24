@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Text, Video, Image } from '@tarojs/components';
+import {
+  View,
+  Text,
+  Video,
+  Image,
+  Swiper,
+  SwiperItem,
+} from '@tarojs/components';
 import { observer, inject } from 'mobx-react';
 import './index.scss';
 
@@ -14,6 +21,7 @@ class Index extends Component {
       myAnwser: [],
       exactAnwser: '',
       isGameOver: false,
+      showYinDao: true,
     };
   }
 
@@ -111,52 +119,79 @@ class Index extends Component {
     }
   };
 
+  //切换下一部
+  _swiperChange = (e) => {
+    // console.log(e.detail);
+    this._nextMovie();
+    this.setState({
+      showYinDao: false,
+    });
+  };
+
   render() {
     const {
       counterStore: { oneMovie, point, words, isWatch },
     } = this.props.store;
     let poster =
       oneMovie.url + '?x-oss-process=video/snapshot,t_0,f_jpg,w_0,h_205,m_fast';
-    const { myAnwser } = this.state;
+    const { myAnwser, showYinDao } = this.state;
 
     return (
       <View className='game'>
         <View className='movie-desc'>
           <Text className='desc'>{oneMovie.note}</Text>
         </View>
-        <View className='movie-wrap'>
-          <Video
-            style='width: 100%;height:205px'
-            src={oneMovie.url}
-            poster={poster}
-            initialTime='0'
-            id='video'
-            autoplay
-            controls
-            loop={false}
-            muted={false}
-            showFullscreenBtn
-            showPlayBtn
-            playBtnPosition='center'
-            enableProgressGesture={false}
-            showProgress={false}
+        {showYinDao ? (
+          <Image
+            className='yindao'
+            src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/yindao.png'
           />
-        </View>
+        ) : null}
+        <Swiper
+          className='movie-wrap'
+          circular
+          onChange={this._swiperChange.bind(this)}
+        >
+          <SwiperItem className='movie-item item-1'>
+            <Video
+              style='width: 100%;'
+              src={oneMovie.url}
+              poster={poster}
+              initialTime='0'
+              id='video'
+              autoplay={false}
+              controls
+              loop={false}
+              muted={false}
+              showFullscreenBtn
+              showPlayBtn
+              playBtnPosition='center'
+              enableProgressGesture={false}
+              showProgress={false}
+            />
+          </SwiperItem>
+          <SwiperItem className='movie-item item-1'>
+            <Video
+              style='width: 100%;'
+              src={oneMovie.url}
+              poster={poster}
+              initialTime='0'
+              id='video'
+              autoplay={false}
+              controls
+              loop={false}
+              muted={false}
+              showFullscreenBtn
+              showPlayBtn
+              playBtnPosition='center'
+              enableProgressGesture={false}
+              showProgress={false}
+            />
+          </SwiperItem>
+        </Swiper>
 
-        <View className='content-wrap at-row at-row__justify--between at-row__align--center'>
-          <View
-            className='see-anwser'
-            onClick={this._watchMovieTitle.bind(this)}
-          >
-            查看电影名
-          </View>
-          <View className='coin-tip'>我的积分:{point}</View>
-          <View className='next-movie' onClick={this._nextMovie.bind(this)}>
-            猜下一部
-          </View>
-        </View>
-
-        <View className='write-wrap '>
+        <View className='write-wrap'>
+          <View className='coin-tip'>当前积分:{point}</View>
           <View className='anwser at-row at-row__justify--center'>
             {myAnwser.map((item, index) => {
               return (
@@ -171,6 +206,12 @@ class Index extends Component {
             })}
           </View>
           <View className='tip'>从下面20个字中选出正确的片名</View>
+          <View
+            className='see-anwser'
+            onClick={this._watchMovieTitle.bind(this)}
+          >
+            点击查看片名
+          </View>
           {isWatch ? (
             <View className='options'>
               <Image

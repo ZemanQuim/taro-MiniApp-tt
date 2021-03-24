@@ -11,7 +11,6 @@ export default {
     'pages/leaderboard/index', //排行榜
     'pages/user_privacy_policy/index', //用户隐私
   ],
-
   window: {
     backgroundTextStyle: 'dark',
     navigationBarBackgroundColor: '#813CEA',

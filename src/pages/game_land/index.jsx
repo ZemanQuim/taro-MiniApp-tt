@@ -12,7 +12,7 @@ class Index extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      id: 1,
+      id: 4,
       index: 0, //填写文字下标
       watchNum: 0,
       myAnwser: [], // 我的答案
@@ -264,14 +264,30 @@ class Index extends Component {
       goalStore: { words },
     } = this.props.store;
 
-    const { myAnwser, bullet, index, exactAnwser, id } = this.state;
+    const { myAnwser, bullet, exactAnwser, id } = this.state;
     let hideName = new Array(exactAnwser.length).fill('*').join(''); //全隐藏
     let halfName = exactAnwser.substr(0, 2) + hideName.substr(2); //半隐藏
 
     return (
       <View className='game'>
         <View className='movie-desc'>
-          <Text className='desc'>片名隐藏《{hideName}》请猜片名或查看片名</Text>
+          <Text className='desc'>
+            《&nbsp;&nbsp;
+            {myAnwser.map((item, i) => {
+              return (
+                <Text className='name' key={i}>
+                  *
+                </Text>
+              );
+            })}
+            》
+          </Text>
+        </View>
+        <View
+          className='see-anwser'
+          onClick={this._watchMovieTitle.bind(this, id)}
+        >
+          点击查看片名
         </View>
 
         <View className='displayGroup'>
@@ -280,7 +296,7 @@ class Index extends Component {
             style='animation: dmAnimation2 30s linear 1s infinite;'
           >
             {bullet.map((item, i) => {
-              if (i < 7) {
+              if (i < 8) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -301,7 +317,7 @@ class Index extends Component {
             style='animation: dmAnimation2 30s linear 1s infinite; '
           >
             {bullet.map((item, ind) => {
-              if (ind > 6 && ind < 12) {
+              if (ind >= 8 && ind < 16) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -322,7 +338,7 @@ class Index extends Component {
             style='animation: dmAnimation2 45s linear 1s infinite; '
           >
             {bullet.map((item, inde) => {
-              if (inde > 11) {
+              if (inde >= 16 && inde < 24) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -338,21 +354,26 @@ class Index extends Component {
               }
             })}
           </View>
-          <View className='peoples'>9999+人已猜对和查看片名</View>
-        </View>
-
-        <View className='content-wrap at-row at-row__justify--between at-row__align--center'>
-          <View className='see-anwser' onClick={this._gameRule.bind(this)}>
-            玩法规则
-          </View>
-          <View className='coin-tip'>
-            片名:{index}/{exactAnwser.length}个字
-          </View>
           <View
-            className='next-movie'
-            onClick={this._watchMovieTitle.bind(this, id)}
+            className='dmGroup btm2'
+            style='animation: dmAnimation2 30s linear 1s infinite; '
           >
-            查看片名
+            {bullet.map((item, indes) => {
+              if (indes >= 24) {
+                return (
+                  <View className='dmItem' key={item.id}>
+                    <View className='dm'>
+                      <View className='avatarBox'>
+                        <image src={item.avatar} className='avatar'></image>
+                      </View>
+                      <Text className='name'>{item.nickname}:</Text>
+                      <Text className='type'>【{item.typeName}】</Text>
+                      <Text className='time'>{item.created_at}</Text>
+                    </View>
+                  </View>
+                );
+              }
+            })}
           </View>
         </View>
 
@@ -408,6 +429,23 @@ class Index extends Component {
           </View>
         </View>
 
+        {/* 底部 */}
+        <View className='game-rule'>
+          <View className='title'>
+            <Text className='text'>游戏规则</Text>
+          </View>
+          <View className='content'>
+            <View className='rule rule1'>
+              1.竞猜玩法：猜对电影奖励5积分，猜错电影扣10积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
+            </View>
+            <View className='rule rule2'>
+              2.积分用途：积分用于猜电影片名和查看电影名称，初始积分100分，每日签到奖励100积分，连续签到越多奖励越多；
+            </View>
+            <View className='rule rule3'>
+              3.免费查看片名前两个字,查看全名需观看广告,猜对片名有积分奖励。
+            </View>
+          </View>
+        </View>
         {/* <Button open-type='share' data-channel='video'>
           拍视频
         </Button> */}

@@ -1,14 +1,15 @@
 .game {
   min-height: 100vh;
-  background-color: #3a466a;
-  padding: 22px 0;
+  position: relative;
+  background: url('https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/game_bg.png')
+    no-repeat top center/100%;
   .movie-desc {
     margin: 0 auto 15px;
     text-align: center;
     max-width: 730px;
     .desc {
       padding: 8px 12px;
-      background-color: #04080b;
+      background-color: #761cdb;
       color: #feffff;
       font-size: 28px;
       border-radius: 22px;
@@ -17,49 +18,43 @@
       white-space: nowrap;
     }
   }
-
-  .content-wrap {
-    padding-top: 20px;
-    .see-anwser,
-    .next-movie {
-      width: 166px;
-      height: 64px;
-      background-color: #dc3806;
-      color: #fff;
-      font-size: 24px;
-      line-height: 64px;
-      text-align: center;
-    }
-    .see-anwser {
-      border-top-right-radius: 32px;
-      border-bottom-right-radius: 32px;
-    }
-    .next-movie {
-      border-top-left-radius: 32px;
-      border-bottom-left-radius: 32px;
-    }
-    .coin-tip {
-      width: 229px;
-      height: 50px;
-      font-size: 24px;
-      line-height: 50px;
-      color: #fff;
-      text-align: center;
-      background-color: #f9991a;
-      border-radius: 12px;
+  .yindao {
+    width: 252px;
+    height: 248px;
+    position: absolute;
+    top: 180px;
+    left: 250px;
+    z-index: 9999;
+  }
+  .movie-wrap {
+    min-height: 450px;
+    .movie-item {
+      min-height: 450px;
     }
   }
 
   .write-wrap {
     margin-top: 20px;
-    border: 2px solid #3d395e;
-    box-shadow: 0 0 24px #1a284d;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .coin-tip {
+      width: 418px;
+      height: 68px;
+      font-size: 28px;
+      line-height: 68px;
+      color: #ff0000;
+      text-align: center;
+      background-color: #380079;
+      border-radius: 34px;
+    }
     .anwser {
       margin: 20px auto;
       .word {
         height: 86px;
         width: 86px;
-        background-color: #32334f;
+        background-color: #460097;
         margin-right: 15px;
         border-radius: 10px;
         color: #fff;
@@ -72,30 +67,42 @@
       margin: 0 auto 18px;
       width: 400px;
       height: 52px;
-      background-color: #332757;
+      background-color: rgba(118, 28, 219, 0.5);
       line-height: 52px;
       border-radius: 12px;
       font-size: 22px;
       color: #ffffff;
       text-align: center;
     }
+    .see-anwser {
+      width: 290px;
+      height: 50px;
+      line-height: 50px;
+      background: linear-gradient(180deg, #ffea61 0%, #f99919 100%);
+      color: #fff;
+      font-size: 28px;
+      text-align: center;
+      border-radius: 25px;
+      margin-bottom: 40px;
+    }
+
     .options {
       padding-left: 60px;
       padding-right: 20px;
       min-height: 443px;
       .word {
-        height: 92px;
-        width: 92px;
-        background-color: #7a35e3;
-        margin-right: 40px;
+        height: 102px;
+        width: 102px;
+        background-color: #ffffff;
+        margin-right: 30px;
         margin-bottom: 26px;
-        border-radius: 10px;
-        color: #fff;
-        line-height: 92px;
+        border-radius: 20px;
+        border: 2px solid #8c3ee3;
+        color: #333333;
+        line-height: 102px;
         text-align: center;
-        // &:nth-child(5n) {
-        //   margin-right: 0;
-        // }
+        font-size: 40px;
+        font-weight: 700;
       }
     }
     .gameover {
