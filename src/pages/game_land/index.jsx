@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Taro from '@tarojs/taro';
-import { View, Text, Image, Button } from '@tarojs/components';
+import classnames from 'classnames';
+import { View, Text, Image } from '@tarojs/components';
 import { AtCurtain } from 'taro-ui';
 import { observer, inject } from 'mobx-react';
 import './index.scss';
-import MovieIcon from '../../assets/movie_icon.png';
 
 @inject('store')
 @observer
@@ -12,14 +12,21 @@ class Index extends Component {
   constructor() {
     super(...arguments);
     this.state = {
-      id: 4,
-      index: 0, //填写文字下标
-      watchNum: 0,
-      myAnwser: [], // 我的答案
+      id: 3, //电影id
+      point: Taro.getStorageSync('point') || 100, //初始积分
       exactAnwser: '', //准确答案
-      isGameOver: false, //游戏是否结束
       bullet: [], //弹幕列表
-      isOpened: false, //弹窗开关
+      active: null, //选中的选项
+      options: [
+        '王牌对王牌',
+        '唐人街探案',
+        '千与千寻',
+        '花木兰',
+        '地质灾难',
+        '灭顶之灾',
+      ], //选项
+      isOpenedFail: false, //失败弹窗开关
+      isOpenedSucc: false, //成功弹窗开关
     };
   }
 
@@ -29,6 +36,9 @@ class Index extends Component {
     const { id } = this.state;
     this._initGame(id);
     this._getGoalRecord(id);
+    try {
+      !Taro.getStorageSync('point') ? Taro.setStorageSync('point', 100) : null;
+    } catch (error) {}
   }
 
   componentWillUnmount() {}
@@ -54,149 +64,21 @@ class Index extends Component {
     });
   };
 
-  //点击答案区域
-  anwserClick = (index) => {
-    const { myAnwser, isGameOver } = this.state;
-    if (isGameOver) return false;
-    for (let i = index; i < myAnwser.length; i++) {
-      myAnwser[i] = '';
-    }
-    this.setState({
-      myAnwser,
-      index,
-    });
-  };
-
-  //点击文字区域
-  wordClick = (item) => {
-    const { myAnwser, index, exactAnwser, isGameOver } = this.state;
-    if (isGameOver) return false;
-    myAnwser.splice(index, 1, item);
-    this.setState({
-      myAnwser,
-      index: index + 1,
-    });
-    // todo 判断是否与正确答案一质
-    if (myAnwser.join('').length === exactAnwser.length) {
-      if (myAnwser.join('') === exactAnwser) {
-        Taro.showModal({
-          title: '结果',
-          content: '恭喜你回答正确! 积分+5\n点击确定进入首页',
-          showCancel: false,
-          success: () => {
-            Taro.reLaunch({ url: '../index/index' });
-          },
-        });
-      } else {
-        Taro.showModal({
-          title: '结果',
-          content: '很遗憾回答错误! 积分-10\n点击确定查看完整片名',
-          showCancel: false,
-          success: () => {
-            // Taro.reLaunch({ url: '../index/index' });
-            console.log('点击确定');
-          },
-        });
-      }
-      //结束
-      this.setState({
-        isGameOver: true,
-      });
-    }
-  };
-
   //进入游戏
   _initGame = async (id) => {
-    //开始游戏
-    this.setState({
-      isGameOver: false,
-    });
     const { goalStore } = this.props.store;
     await goalStore.getGoalMovie({ goal_movie_id: id });
-    const { oneMovie } = goalStore;
-    let myAnwser = new Array(oneMovie.title.length).fill('');
+    const { oneMovie, options } = goalStore;
     this.setState({
-      myAnwser,
       exactAnwser: oneMovie.title,
-      index: 0,
+      options: options,
     });
   };
-
-  //查看片名
-  _watchMovieTitle = async (id) => {
-    let watchNum = this.state.watchNum;
-    let index = this.state.index;
-    if (watchNum < 2 && index < 2) {
-      const { myAnwser, exactAnwser } = this.state;
-      const { goalStore } = this.props.store;
-      await goalStore.getGoalMovie({ goal_movie_id: id });
-      let anwser = myAnwser;
-      watchNum++;
-      if (index > exactAnwser.length - 1) {
-        index = exactAnwser.length;
-      } else {
-        anwser[index] = exactAnwser[index];
-      }
-      this.setState({
-        myAnwser: anwser,
-        watchNum: watchNum,
-        index: index + 1,
-      });
-      if (myAnwser.join('').length === exactAnwser.length) {
-        if (myAnwser.join('') === exactAnwser) {
-          Taro.showModal({
-            title: '结果',
-            content: '恭喜你回答正确! 积分+5\n点击确定进入首页',
-            success: () => {
-              Taro.reLaunch({ url: '../index/index' });
-            },
-          });
-        } else {
-          Taro.showModal({
-            title: '结果',
-            content: '很遗憾回答错误! 积分-10\n点击确定查看完整片名',
-            success: () => {
-              // Taro.reLaunch({ url: '../index/index' });
-              console.log('点击确定');
-            },
-          });
-        }
-        //结束
-        this.setState({
-          isGameOver: true,
-        });
-      }
-    } else {
-      this.handleChange();
-    }
-  };
-
-  //玩法规则
-  _gameRule = () => {
-    Taro.showModal({
-      title: '玩法规则',
-      content:
-        '免费查看片名前两个字\n查看全名需观看广告\n猜对片名有积分奖励\n积分只用于电影竞猜',
-      confirmColor: '#FD2C57',
-      showCancel: false,
-    });
-  };
-
-  //弹窗
-  handleChange() {
-    this.setState({
-      isOpened: true,
-    });
-  }
-  onClose() {
-    this.setState({
-      isOpened: false,
-    });
-  }
 
   //查看完整片名
-  _watchFullMovieTitle = () => {
+  _watchMovieTitle = () => {
     const { exactAnwser } = this.state;
+    this._onCloseFail();
     // 创建激励视频
     const videoAd = Taro.createRewardedVideoAd({
       adUnitId: '1cc8wlr6hjyl99n6i8',
@@ -212,12 +94,7 @@ class Index extends Component {
     videoAd.onClose((status) => {
       if ((status && status.isEnded) || status === undefined) {
         // 正常播放结束，下发奖励
-        let myAnwser = exactAnwser.split('');
-        this.setState({
-          isGameOver: true,
-          myAnwser,
-          index: myAnwser.length,
-        });
+
         Taro.showModal({
           title: '您查看的影视名称',
           content: `《${exactAnwser}》\n点击确定进入首页`,
@@ -259,21 +136,100 @@ class Index extends Component {
     }
   }
 
+  //选择选项
+  _changeOption = (index) => {
+    this.setState({ active: index });
+  };
+
+  //确认答案
+  _confirm = async () => {
+    const { active, options, point } = this.state;
+    const { goalStore } = this.props.store;
+    const { oneMovie } = goalStore;
+    if (point >= 30) {
+      if (active != null) {
+        if (options[active] == oneMovie.title) {
+          this.setState({ isOpenedSucc: true });
+        } else {
+          Taro.setStorageSync('point', point - 30);
+          this.setState({
+            isOpenedFail: true,
+            point: Taro.getStorageSync('point'),
+          });
+        }
+      } else {
+        Taro.showToast({ title: '请选中选项', icon: 'fail' });
+      }
+    } else {
+      Taro.showModal({
+        title: '提示',
+        content: '积分不足,点击确定看视频查看片名',
+        success: (res) => {
+          if (res.confirm) {
+            this._watchMovieTitle();
+          }
+        },
+      });
+    }
+  };
+
+  _onCloseFail() {
+    this.setState({
+      isOpenedFail: false,
+    });
+  }
+  _onCloseSucc() {
+    this.setState({
+      isOpenedSucc: false,
+    });
+  }
+  _ToHomePage() {
+    this.setState({
+      isOpenedSucc: false,
+    });
+    Taro.reLaunch({ url: '../index/index' });
+  }
+
   render() {
     const {
-      goalStore: { words },
+      goalStore: { oneMovie },
     } = this.props.store;
-
-    const { myAnwser, bullet, exactAnwser, id } = this.state;
-    let hideName = new Array(exactAnwser.length).fill('*').join(''); //全隐藏
-    let halfName = exactAnwser.substr(0, 2) + hideName.substr(2); //半隐藏
-
+    const { bullet, exactAnwser, options, active, point } = this.state;
+    let title = new Array(exactAnwser.length).fill('*'); //全隐藏
+    const serialNumber = [
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+      'P',
+      'Q',
+      'R',
+      'S',
+      'T',
+      'U',
+      'V',
+      'W',
+      'X',
+      'Y',
+      'Z',
+    ];
     return (
       <View className='game'>
         <View className='movie-desc'>
           <Text className='desc'>
             《&nbsp;&nbsp;
-            {myAnwser.map((item, i) => {
+            {title.map((item, i) => {
               return (
                 <Text className='name' key={i}>
                   *
@@ -283,20 +239,14 @@ class Index extends Component {
             》
           </Text>
         </View>
-        <View
-          className='see-anwser'
-          onClick={this._watchMovieTitle.bind(this, id)}
-        >
-          点击查看片名
-        </View>
-
+        {/* 弹幕 */}
         <View className='displayGroup'>
           <View
             className='dmGroup top'
             style='animation: dmAnimation2 30s linear 1s infinite;'
           >
             {bullet.map((item, i) => {
-              if (i < 8) {
+              if (i < 10) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -314,10 +264,10 @@ class Index extends Component {
           </View>
           <View
             className='dmGroup mid'
-            style='animation: dmAnimation2 30s linear 1s infinite; '
+            style='animation: dmAnimation2 40s linear 1s infinite; '
           >
             {bullet.map((item, ind) => {
-              if (ind >= 8 && ind < 16) {
+              if (ind >= 10 && ind < 20) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -338,7 +288,7 @@ class Index extends Component {
             style='animation: dmAnimation2 45s linear 1s infinite; '
           >
             {bullet.map((item, inde) => {
-              if (inde >= 16 && inde < 24) {
+              if (inde >= 20 && inde < 30) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -356,10 +306,10 @@ class Index extends Component {
           </View>
           <View
             className='dmGroup btm2'
-            style='animation: dmAnimation2 30s linear 1s infinite; '
+            style='animation: dmAnimation2 40s linear 1s infinite; '
           >
             {bullet.map((item, indes) => {
-              if (indes >= 24) {
+              if (indes >= 30) {
                 return (
                   <View className='dmItem' key={item.id}>
                     <View className='dm'>
@@ -376,79 +326,97 @@ class Index extends Component {
             })}
           </View>
         </View>
-
-        <AtCurtain
-          isOpened={this.state.isOpened}
-          onClose={this.onClose.bind(this)}
-          closeBtnPosition='top-right'
-        >
-          <View className='curtain-wrap'>
-            <View className='title'>查看全名</View>
-            <View className='movie-title'>《{halfName}》</View>
-            <View className='tips-1'>两次提示机会已用完</View>
-            <View className='tips-2'>需要观看视频 显示完整片名</View>
-            <View
-              className='curtain-btn'
-              onClick={this._watchFullMovieTitle.bind(this)}
-            >
-              <Image src={MovieIcon} className='movie-icon' />
-              <Text className='btn'>查看完整片名</Text>
+        {/* 答题卡 */}
+        <View className='write-wrap'>
+          <View className='coin-tip'>当前积分:{point}</View>
+          <View className='options'>
+            <View className='tip'>从下面选项中选出正确的片名</View>
+            <View className='option-items'>
+              {options.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    className={classnames({
+                      item: true,
+                      active: active == index ? true : false,
+                    })}
+                    onClick={this._changeOption.bind(this, index)}
+                  >
+                    {serialNumber[index]}:{item}
+                  </View>
+                );
+              })}
             </View>
           </View>
-        </AtCurtain>
-
-        <View className='write-wrap '>
-          <View className='anwser at-row at-row__justify--center'>
-            {myAnwser.map((item, i) => {
-              return (
-                <View
-                  key={i}
-                  className='word'
-                  onClick={this.anwserClick.bind(this, i)}
-                >
-                  {item}
-                </View>
-              );
-            })}
-          </View>
-
-          <View className='tip'>从下面20个字中选出正确的片名</View>
-
-          <View className='options at-row at-row--wrap at-row__justify--between'>
-            {words?.map((item, i) => {
-              return (
-                <View
-                  className='word'
-                  key={i}
-                  onClick={this.wordClick.bind(this, item)}
-                >
-                  {item}
-                </View>
-              );
-            })}
-          </View>
+          <View className='confirm' onClick={this._confirm.bind(this)}></View>
         </View>
-
-        {/* 底部 */}
+        {/* 底部规则 */}
         <View className='game-rule'>
           <View className='title'>
             <Text className='text'>游戏规则</Text>
           </View>
           <View className='content'>
             <View className='rule rule1'>
-              1.竞猜玩法：猜对电影奖励5积分，猜错电影扣10积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
+              1.竞猜玩法：猜对电影奖励10积分，猜错电影扣30积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
             </View>
             <View className='rule rule2'>
               2.积分用途：积分用于猜电影片名和查看电影名称，初始积分100分，每日签到奖励100积分，连续签到越多奖励越多；
             </View>
-            <View className='rule rule3'>
-              3.免费查看片名前两个字,查看全名需观看广告,猜对片名有积分奖励。
-            </View>
           </View>
         </View>
-        {/* <Button open-type='share' data-channel='video'>
-          拍视频
-        </Button> */}
+        {/* 失败弹窗 */}
+        <AtCurtain
+          isOpened={this.state.isOpenedFail}
+          onClose={this._onCloseFail.bind(this)}
+        >
+          <View className='curtain-wrap'>
+            <Image
+              className='icon'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/cry_icon.png'
+            />
+            <Image
+              className='info'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/info-icon.png'
+            />
+            <View className='price'>-30积分</View>
+            <View className='video-name'>《{title.join('')}》</View>
+            <View
+              className='watch-answer'
+              onClick={this._watchMovieTitle.bind(this)}
+            >
+              <Image
+                className='video-icon'
+                src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/video-icon.png'
+              />
+              <Text>看视频查看片名</Text>
+            </View>
+          </View>
+        </AtCurtain>
+        {/* 成功弹窗 */}
+        <AtCurtain
+          className='success'
+          isOpened={this.state.isOpenedSucc}
+          onClose={this._onCloseSucc.bind(this)}
+        >
+          <View className='curtain-wrap'>
+            <Image
+              className='icon'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/success_icon.png'
+            />
+            <Image
+              className='info'
+              src='https://p2-static.oss-cn-beijing.aliyuncs.com/MiniApp/pmccc/images/success_text_icon.png'
+            />
+            <View className='price'>+10积分</View>
+            <View className='video-name'>《{oneMovie.title}》</View>
+            <View
+              className='watch-answer'
+              onClick={this._ToHomePage.bind(this)}
+            >
+              <Text>去首页继续答题</Text>
+            </View>
+          </View>
+        </AtCurtain>
       </View>
     );
   }

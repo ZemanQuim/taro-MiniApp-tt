@@ -228,7 +228,7 @@ class Index extends Component {
           </View>
           <View className='content'>
             <View className='rule rule1'>
-              1.竞猜玩法：猜对电影奖励5积分，猜错电影扣10积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
+              1.竞猜玩法：猜对电影奖励10积分，猜错电影扣30积分，查看片名扣100积分，查看电影名和猜对电影记录都会在个人中心里查看；
             </View>
             <View className='rule rule2'>
               2.积分用途：积分用于猜电影片名和查看电影名称，初始积分100分，每日签到奖励100积分，连续签到越多奖励越多；

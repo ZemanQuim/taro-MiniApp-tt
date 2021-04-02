@@ -6,6 +6,7 @@ class goalStore {
   @observable record = [];
   @observable oneMovie = {};
   @observable words = [];
+  @observable options = [];
 
   //猜一部电影
   @action getGoalMovie = async (params) => {
@@ -18,6 +19,7 @@ class goalStore {
       runInAction(() => {
         this.oneMovie = res.data.movie;
         this.words = res.data.words;
+        this.options = res.data.name_option;
       });
     } catch (error) {}
   };

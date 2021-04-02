@@ -22,17 +22,10 @@ const customInterceptor = (chain) => {
       pageToLogin();
       return Promise.reject('需要鉴权');
     } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
-      // if (process.env.NODE_ENV === 'development') {
       if (url.includes('login')) {
         let { Authorization } = res.header;
         Taro.setStorageSync('Authorization', Authorization);
       }
-      // } else {
-      //   if (url.includes('login')) {
-      //     let { authorization } = res.header;
-      //     Taro.setStorageSync('Authorization', authorization);
-      //   }
-      // }
       return res.data;
     }
   });

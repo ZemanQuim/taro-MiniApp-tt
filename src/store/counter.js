@@ -19,6 +19,7 @@ class counterStore {
   @observable myGuessList = []; //我猜对的
   @observable point = 0; //当前积分余额
   @observable oneMovie = {}; //当前视频信息
+  @observable options = []; //答题卡选项
   @observable words = []; //当前可选文字
   @observable exactAnwser = ''; //准确答案
   @observable isWatch = false; //是否查看答案
@@ -92,6 +93,7 @@ class counterStore {
       Taro.hideLoading();
       runInAction(() => {
         this.oneMovie = res.data.movie;
+        this.options = res.data.name_option;
         this.point = res.data.point;
         this.words = res.data.words;
         this.isWatch = false;
@@ -103,15 +105,16 @@ class counterStore {
   @action anwser = async (postData) => {
     try {
       const { data } = await anwser(postData);
-      data.state == 1
-        ? Taro.showToast({ title: '答对加5分', duration: 2000 })
-        : Taro.showToast({
-            title: '答错扣10分',
-            icon: 'fail',
-          });
+      // data.state == 1
+      //   ? Taro.showToast({ title: '答对加5分', duration: 2000 })
+      //   : Taro.showToast({
+      //       title: '答错扣10分',
+      //       icon: 'fail',
+      //     });
       runInAction(() => {
         this.point = data.point;
       });
+      return data;
     } catch (error) {}
   };
 
@@ -130,7 +133,6 @@ class counterStore {
         runInAction(() => {
           this.isWatch = false;
         });
-        // Taro.showToast({ title: '积分不足', icon: 'fail' });
       }
     } catch (error) {}
   };
